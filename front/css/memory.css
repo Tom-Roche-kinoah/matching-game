@@ -1,0 +1,125 @@
+/* Variables globales */
+:root {
+    --main-color: #55A1CF;
+    --card-size: 7em;
+    --card-radius: .5em;
+}
+
+/* Reset rapide */
+*, ::after, ::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+input, button, textarea, select {
+    font: inherit;
+}
+
+/* Design */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--main-color);
+    background: linear-gradient(#8DA1A5, #FEFEFE);
+
+    /* le body doit faire la hauteur du viewport */
+    height: 100vh;
+    
+    /* distribuer verticalement les éléments dans le viewport */
+    display: flex;
+    flex-direction: column;
+}
+header {
+    margin-top: auto; /* auto sur un margin d'un flex item = distribution de l'espace disponible dans cette direction */
+    background-color: white;
+    border-top: solid .5rem gray;
+    padding: 1rem;
+}
+main {
+    flex-grow: 1; /* on force le flex item à occuper l'espace */
+}
+.game {
+    height: 100%;
+    /* le combo de 3 lignes ci dessous place le flex item au centre de son parent ! */
+    /* à condition que l'item soit seul */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cards {
+    display: flex;
+    flex-wrap: wrap; /* on autorise les items flex à revenir à la ligne si nécéssaire */
+    width: calc(var(--card-size) * 9);
+    /* on souhaite 9 items par ligne, donc on définit la largeur à 9x largeur d'un item */
+}
+.card-outer {
+    width: var(--card-size);
+    padding: .5em;
+    aspect-ratio: 1/1;
+    /* 1/1 est un ratio carré, on pourrait utiliser 4/3 par ex. */
+    /* cela evite de calculer soi-meme la 2eme dimension */
+    perspective: 10em;
+    /* L'element card enfant, va pivoter sur l'axe Y, pour donner un effet 3D, on définit une perspective sur le parent */
+}
+.card-outer .card {
+    border-radius: var(--card-radius);
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform-origin: center;
+    transition: rotate 0.4s ease-in-out;
+    cursor: pointer;
+    box-shadow:
+        0 2px 0 rgba(0,0,0,.3),
+        0 .7em .5em -.3em rgba(0,0,0,.2)
+    ;
+}
+.card-outer .card:hover {
+    outline: solid 5px var(--main-color);
+}
+.card-outer .card.visible {
+    rotate: y 180deg;
+}
+.card-outer .face {
+    border-radius: var(--card-radius);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+.card-outer .face.front {
+    z-index: 1;
+    background-color: white;
+    rotate: y -180deg;
+    background-image: url(../img/cards.png);
+    background-size: 100%;
+    background-position: 0 -100%;
+}
+
+/* la face de la carte est déterminée par un attribut personnalisé data-card */
+/* on fait simplement glisser le sprite pour en afficher la bonne partie */
+.card-outer [data-card="1"] .face.front { background-position: 0 -100%; }
+.card-outer [data-card="2"] .face.front { background-position: 0 -200%; }
+.card-outer [data-card="3"] .face.front { background-position: 0 -300%; }
+.card-outer [data-card="4"] .face.front { background-position: 0 -400%; }
+.card-outer [data-card="5"] .face.front { background-position: 0 -500%; }
+.card-outer [data-card="6"] .face.front { background-position: 0 -600%; }
+.card-outer [data-card="7"] .face.front { background-position: 0 -700%; }
+.card-outer [data-card="8"] .face.front { background-position: 0 -800%; }
+.card-outer [data-card="9"] .face.front { background-position: 0 -900%; }
+.card-outer [data-card="10"] .face.front { background-position: 0 -1000%; }
+.card-outer [data-card="11"] .face.front { background-position: 0 -1100%; }
+.card-outer [data-card="12"] .face.front { background-position: 0 -1200%; }
+.card-outer [data-card="13"] .face.front { background-position: 0 -1300%; }
+.card-outer [data-card="14"] .face.front { background-position: 0 -1400%; }
+.card-outer [data-card="15"] .face.front { background-position: 0 -1500%; }
+.card-outer [data-card="16"] .face.front { background-position: 0 -1600%; }
+.card-outer [data-card="17"] .face.front { background-position: 0 -1700%; }
+.card-outer [data-card="18"] .face.front { background-position: 0 -1800%; }
+
+.card-outer .face.back {
+    z-index: 2;
+    background-color: #ccc;
+    background-image: url(../img/card-back-01.gif);
+    background-size: 150%;
+}
