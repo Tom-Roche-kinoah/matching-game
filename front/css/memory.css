@@ -1,8 +1,11 @@
 /* Variables globales */
 :root {
     --main-color: #55A1CF;
+    --main-color-darker: #1B6C9D;
+    --contrast-color: white;
     --card-size: 7em;
     --card-radius: .5em;
+    --base-ui-radius: .3rem;
 }
 
 /* Reset rapide */
@@ -31,7 +34,6 @@ body {
 header {
     margin-top: auto; /* auto sur un margin d'un flex item = distribution de l'espace disponible dans cette direction */
     background-color: white;
-    border-top: solid .5rem gray;
     padding: 1rem;
 }
 main {
@@ -45,6 +47,13 @@ main {
     justify-content: center;
     align-items: center;
 }
+
+/* GAME STATES */
+.game > section { display: none }
+[data-game-state="1"] .hall-of-fame { display: flex;}
+[data-game-state="2"] .cards { display: flex;}
+
+/* CARDS */
 .cards {
     display: flex;
     flex-wrap: wrap; /* on autorise les items flex à revenir à la ligne si nécéssaire */
@@ -122,4 +131,89 @@ main {
     background-color: #ccc;
     background-image: url(../img/card-back-01.gif);
     background-size: 150%;
+}
+
+/* HALL OF FAME */
+.section-title {
+    margin-bottom: 1em;
+    text-align: center;
+}
+.hall-of-fame {
+    border-radius: var(--base-ui-radius);
+    flex-basis: 20em;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255,255,255,1);
+    padding: 2em;
+}
+.hall-of-fame ul {
+    border-bottom: solid 2px var(--main-color);
+}
+.hall-of-fame ul li {
+    display: flex;
+    justify-content: space-between;
+    padding: .5em;
+    border-top: solid 2px var(--main-color);
+}
+.player-name {
+    font-weight: bold;
+}
+.player-score {
+
+}
+
+/* UI */
+.ui {
+    padding: 1rem 5rem;
+    position: relative;
+    display: flex;
+    gap: 3em;
+    justify-content: space-between;
+}
+.game-title {
+    margin-right: auto;
+}
+.btn {
+    cursor: pointer;
+    border-radius: var(--base-ui-radius);
+    border: none;
+    padding: 1em;
+    font-weight: bold;
+    background-color: var(--main-color);
+    color: var(--contrast-color);
+}
+.btn:hover {
+    background-color: var(--main-color-darker);
+}
+.timer-bar {
+    position: absolute;
+    top: -.5rem;
+    left: 0;
+    height: .5rem;
+    width: 100%;
+    background-color: gray;
+}
+.timer-bar .bar {
+    height: 100%;
+    width: 45%;
+    background-color: var(--main-color);
+}
+
+.ui-element {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    line-height: 1.4em;
+}
+.timer {
+
+}
+.ui-element-title {
+    text-transform: uppercase;
+    font-size: .8em;
+    color: #8DA1A5;
+}
+.ui-element-content {
+    color: var(--main-color);
+    font-size: 2em;
 }
