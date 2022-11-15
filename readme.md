@@ -65,6 +65,13 @@ Créer les dossiers en suivant l'architecture proposée ici :
 
 ## 2 - Conception statique de l'affichage : html et css
 
+### Html et CSS
+En s'appuyant sur la maquette, intégrer la vue principale de l'application.
+
+:bulb: *Astuce  : flex est ton ami !*
+
+L'idée est d'imaginer une carte qui a 2 états : affichée/masquée. Une classe css associée permetterait de basculer d'un état à l'autre.
+
 ## 3 - dynamisation de l'affichage : js en front
 
 ## 4 - persistance des données : js en back, postgresql
