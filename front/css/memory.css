@@ -76,17 +76,24 @@ main {
     position: relative;
     transform-style: preserve-3d;
     transform-origin: center;
-    transition: rotate 0.4s ease-in-out;
+    transition:
+        rotate 0.4s ease-in-out,
+        scale 0.5s ease
+    ;
     cursor: pointer;
     box-shadow:
         0 2px 0 rgba(0,0,0,.3),
         0 .7em .5em -.3em rgba(0,0,0,.2)
     ;
 }
-.card-outer .card:hover {
+.card-outer:not(.discovered) .card:hover {
     outline: solid 5px var(--main-color);
 }
-.card-outer .card.visible {
+.card-outer.discovered .card {
+    scale: .9;
+    cursor: initial;
+}
+.card-outer.visible .card {
     rotate: y 180deg;
 }
 .card-outer .face {
@@ -107,24 +114,25 @@ main {
 
 /* la face de la carte est déterminée par un attribut personnalisé data-card */
 /* on fait simplement glisser le sprite pour en afficher la bonne partie */
-.card-outer [data-card="1"] .face.front { background-position: 0 -100%; }
-.card-outer [data-card="2"] .face.front { background-position: 0 -200%; }
-.card-outer [data-card="3"] .face.front { background-position: 0 -300%; }
-.card-outer [data-card="4"] .face.front { background-position: 0 -400%; }
-.card-outer [data-card="5"] .face.front { background-position: 0 -500%; }
-.card-outer [data-card="6"] .face.front { background-position: 0 -600%; }
-.card-outer [data-card="7"] .face.front { background-position: 0 -700%; }
-.card-outer [data-card="8"] .face.front { background-position: 0 -800%; }
-.card-outer [data-card="9"] .face.front { background-position: 0 -900%; }
-.card-outer [data-card="10"] .face.front { background-position: 0 -1000%; }
-.card-outer [data-card="11"] .face.front { background-position: 0 -1100%; }
-.card-outer [data-card="12"] .face.front { background-position: 0 -1200%; }
-.card-outer [data-card="13"] .face.front { background-position: 0 -1300%; }
-.card-outer [data-card="14"] .face.front { background-position: 0 -1400%; }
-.card-outer [data-card="15"] .face.front { background-position: 0 -1500%; }
-.card-outer [data-card="16"] .face.front { background-position: 0 -1600%; }
-.card-outer [data-card="17"] .face.front { background-position: 0 -1700%; }
-.card-outer [data-card="18"] .face.front { background-position: 0 -1800%; }
+.card-outer[data-id="1"] .face.front { background-position: 0 -100%; }
+.card-outer[data-id="1"] .face.front { background-position: 0 -100%; }
+.card-outer[data-id="2"] .face.front { background-position: 0 -200%; }
+.card-outer[data-id="3"] .face.front { background-position: 0 -300%; }
+.card-outer[data-id="4"] .face.front { background-position: 0 -400%; }
+.card-outer[data-id="5"] .face.front { background-position: 0 -500%; }
+.card-outer[data-id="6"] .face.front { background-position: 0 -600%; }
+.card-outer[data-id="7"] .face.front { background-position: 0 -700%; }
+.card-outer[data-id="8"] .face.front { background-position: 0 -800%; }
+.card-outer[data-id="9"] .face.front { background-position: 0 -900%; }
+.card-outer[data-id="10"] .face.front { background-position: 0 -1000%; }
+.card-outer[data-id="11"] .face.front { background-position: 0 -1100%; }
+.card-outer[data-id="12"] .face.front { background-position: 0 -1200%; }
+.card-outer[data-id="13"] .face.front { background-position: 0 -1300%; }
+.card-outer[data-id="14"] .face.front { background-position: 0 -1400%; }
+.card-outer[data-id="15"] .face.front { background-position: 0 -1500%; }
+.card-outer[data-id="16"] .face.front { background-position: 0 -1600%; }
+.card-outer[data-id="17"] .face.front { background-position: 0 -1700%; }
+.card-outer[data-id="18"] .face.front { background-position: 0 -1800%; }
 
 .card-outer .face.back {
     z-index: 2;
