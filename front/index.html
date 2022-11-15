@@ -5,121 +5,51 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/memory.css">
-    <title>Memory !</title>
+    <title>🥝 Memory !</title>
     <script src="js/memory.js" defer></script>
 </head>
 <body>
 
     <main>
-        <div class="game">
+        <div class="game" data-game-state="2">
 
-            <div class="cards">
+            <section class="hall-of-fame">
+                <h2 class="section-title">Hall Of Fame</h2>
+                <ul>
+                    <li>
+                        <span class="player-name">Camille</span>
+                        <span class="player-score">12s</span>
+                    </li>
+                    <li>
+                        <span class="player-name">Charly</span>
+                        <span class="player-score">27s</span>
+                    </li>
+                    <li>
+                        <span class="player-name">Roméo</span>
+                        <span class="player-score">49s</span>
+                    </li>
+                </ul>
+            </section>
 
-                <div class="card-outer">
-                    <div class="card" data-card="1">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card visible" data-card="2">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="3">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="2">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="4">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="1">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="1">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="1">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="1">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="1">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="1">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="1">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="1">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-                <div class="card-outer">
-                    <div class="card" data-card="1">
-                        <div class="face front"></div>
-                        <div class="face back"></div>
-                    </div>
-                </div>
-
-            </div>
+            <section class="cards">
+            </section>
 
         </div>
     </main>
-    <header>
-        <h1>Memory</h1>
-        <button>Nouvelle Partie</button>
+    <header class="ui">
+        <div class="timer-bar">
+            <div class="bar"></div>
+        </div>
+        <h1 class="game-title">Memory</h1>
+        <div class="ui-element timer">
+            <span class="ui-element-title">Temps</span>
+            <span class="ui-element-content">97s</span>
+        </div>
+        <div class="ui-element score">
+            <span class="ui-element-title">Paires trouvées</span>
+            <span class="ui-element-content">4/18</span>
+        </div>
+        <button class="btn new-game-btn">Nouvelle Partie</button>
     </header>
     
 </body>
