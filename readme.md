@@ -72,7 +72,64 @@ En s'appuyant sur la maquette, intégrer la vue principale de l'application.
 
 L'idée est d'imaginer une carte qui a 2 états : affichée/masquée. Une classe css associée permetterait de basculer d'un état à l'autre.
 
+Exploiter le principe des "sprites Sheets" : une seule image combine differents éléments visuels, grâce aux propriétés css de positionnement et de taills de backgrounds, il est possible de n'afficher que la partie qui nous interresse :)
+
+Ne pas hésiter à utiliser des attributs personnalisés pour définir des états applicatifs dans la vue.
+
+**Petit bonus technique** : il est possible de créer un effet "3D Card Flip" en pure css, en utilisant les propriétés de transformation 3D et la perspective.
+
 ## 3 - dynamisation de l'affichage : js en front
+
+### Mise en place du JS front
+
+Nous avons besoin d'un fichier **memory.js** à lier au html.
+
+Créons le dans le répertoire approprié `front/js/` puis relions le au html avec la balise `<script src="js/memory.js" defer></script>` dans le head du document.
+
+Note : placé dans le head, le js qui va manipuler le dom, doit attendre que celui-ci soit entièrement chargé dans le navigateur avant de s'executer, c'est le rôle de la propriété `defer` utilisée ici.
+
+Un petit `console.log('JS chargé !')` en début de fichier permet de vérifier si tout est ok dans la console du navigateur.
+
+#### L'objet princpal : **memory**
+
+```JS
+const memory = {
+
+  // Méthode d'initialisation de l'app
+  init: () => {
+    console.log('Jeu Chargé')
+  }
+};
+
+memory.init();
+```
+
+L'ensemble des propriétés et des méthodes concernant le jeu seront écrites dans cet objet.
+
+##### Etape 1 : identifier quelques états applicatifs
+
+L'application possède 3 états de jeu principaux : 
+- Accueil : affiche le Hall Of Fame
+- Game : on joue !
+- Game Over : on joue plus... et on rentre son blaze si on a scoré :sunglasses:
+
+On découvre ensuite quelques paramètres de jeu
+- la limite de temps d'une partie
+- le nombre de paires à distribuer
+- la durée d'affichage des cartes retournées
+
+:information_source: Ces parametres permettront d'ajuster la difficulté du jeu.
+
+On stockera également la data provenant du serveur
+- Hall Of Fame
+
+##### Etape 2 : Logique de création et ditribution des cartes
+On doit distribuer N x 2 cartes, ou N est le nombre de paires parametrées.
+
+Il existe plusiseurs manières de créer N éléments puis de les injecter dans le dom.
+
+Nous choisirons la méthode qui consiste à s'appuyer sur un tableau (array) de carte randomisé, sur lequel nous itérerons la création des cartes avec par exemple une boucle `foreach`
+
 
 ## 4 - persistance des données : js en back, postgresql
 
