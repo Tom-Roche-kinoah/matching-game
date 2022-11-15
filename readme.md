@@ -1,6 +1,6 @@
 # Matching Game 
 
-**Le jeu du Memory**
+**Le jeu du Memory ** :space_invader:
 
 Un grand classique de l'enfance qui consiste à collecter des paires de figures identiques.
 
@@ -111,7 +111,7 @@ L'ensemble des propriétés et des méthodes concernant le jeu seront écrites d
 L'application possède 3 états de jeu principaux : 
 - Accueil : affiche le Hall Of Fame
 - Game : on joue !
-- Game Over : on joue plus... et on rentre son blaze si on a scoré :sunglasses:
+- Game Over : on ne joue plus... et on rentre son blaze si on a scoré :sunglasses:
 
 On découvre ensuite quelques paramètres de jeu
 - la limite de temps d'une partie
@@ -123,12 +123,40 @@ On découvre ensuite quelques paramètres de jeu
 On stockera également la data provenant du serveur
 - Hall Of Fame
 
+```JS
+const memory = {
+  // Propriétés générales
+  gameState: 1, 
+  hallOfFame: [], 
+
+  // Parametres de jeu
+  timeLimit: 240,
+  cardDisplayTime: 3,
+  numberOfCardPairs: 18, 
+
+  // Méthode d'initialisation de l'app
+  init: () => {
+    console.log('Jeu Chargé')
+  }
+};
+```
+
 ##### Etape 2 : Logique de création et ditribution des cartes
+
 On doit distribuer N x 2 cartes, ou N est le nombre de paires parametrées.
 
 Il existe plusiseurs manières de créer N éléments puis de les injecter dans le dom.
 
 Nous choisirons la méthode qui consiste à s'appuyer sur un tableau (array) de carte randomisé, sur lequel nous itérerons la création des cartes avec par exemple une boucle `foreach`
+
+##### Etape 3 : Logique d'affichage et de comparaison d'une paire visible
+
+Le but maintenant est de rendre interactive chaque carte, en leur attachant un evenement click, qui déclenchera un certain nombre d'actions :
+- La carte doit se retourner (ajout d'une classe css)
+- La carte doit se stocker dans un comparateur
+- Si la carte est la 2eme du comparateur, alors il faut évaluer s'il s'agit d'une paire
+
+:warning: Attention : Que se passe t'il si on clique 2x de suite sur la meme carte ?
 
 
 ## 4 - persistance des données : js en back, postgresql
