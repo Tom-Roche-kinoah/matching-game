@@ -34,7 +34,34 @@ Nous allons construire le projet dans un environnement **Node.js,** en nous appu
 Il s'agit d'une application monolitique, mais avec une ouverture sur le concept d'api.
 
 ### Node.js
-Pour commencer, nous allons initier le projet à la racine de notre dossier avec la commande `npm install`
+Pour commencer, nous allons initier le projet à la racine de notre dossier avec la commande `npm init`
+
+*( `npm init -y` pour ignorer le générateur interactif )*
+
+Ensuite nous installons les modules nécéssaires à notre projet, pour le moment nous avons besoin de :
+- **express** (le couteau suisse des serveurs http sous node) `npm install express`
+- **pg** (le client postgresql pour node) `npm install pg`
+- **dotenv** (pour stocker des variables d'environnement) `npm install dotenv`
+
+Pour nous simplifier le développement, nous allons nous assister de **nodemon** que l'on installera en dépendances de développement. Il se chargera de relancer le serveur à notre place lors de nos modifications. `npm install nodemon --save-dev`
+
+:bulb: *Astuce 1 : il est possible d'installer plusieurs dépendances en enchainant leur nom dans la commande d'install, ex :* `npm install express pg dotenv`
+
+:bulb: *Astuce 2 : on n'oublie pas de créer et définir le fichier .gitignore, pour éviter de synchroniser les modules node et le .env qui contiendra des informations sensibles !*
+
+### Structure de l'application
+Créer les dossiers en suivant l'architecture proposée ici :
+
+📁 matching-game \
+┗ 📁 server \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┣ 📁 controllers \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┗ 📁 dataMappers \
+┣ 📁 front \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┗ 📁 css \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┗ 📁 img \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┗ 📁 js
+
+
 
 ## 2 - Conception statique de l'affichage : html et css
 
