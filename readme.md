@@ -1,6 +1,6 @@
 # Matching Game 
 
-**Le jeu du Memory ** :space_invader:
+Le jeu du Memory :space_invader: 
 
 Un grand classique de l'enfance qui consiste à collecter des paires de figures identiques.
 
@@ -29,7 +29,7 @@ Idéal pour travailler sa mémoire et sa concentration.
 - l'écran d'accueil affiche les meilleurs scores (Hall Of Fame)
 
 ## 1 - Mise en place de l'environnement de travail
-Nous allons construire le projet dans un environnement **Node.js,** en nous appuyant sur le framework **express**, qui s'occupera de servir la page de jeu, d'interagir avec la base de données **postresql**, et de répondre aux **requetes asynchrones** de la page de jeu.
+Nous allons construire le projet dans un environnement **Node.js,** en nous appuyant sur le framework **express**, qui s'occupera de servir la page de jeu, d'interagir avec la base de données **postgresql**, et de répondre aux **requetes asynchrones** de la page de jeu.
 
 Il s'agit d'une application monolitique, mais avec une ouverture sur le concept d'api.
 
