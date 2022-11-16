@@ -16,6 +16,15 @@
 }
 input, button, textarea, select {
     font: inherit;
+    color: inherit;
+}
+input:focus, button:focus, textarea:focus, select:focus {
+    /* outline: solid 1px black; */
+    outline: none;
+    box-shadow: inset 0 0 0 4           px var(--main-color-darker);
+}
+::placeholder {
+    color: rgba(0,0,0,.5);
 }
 
 /* Design */
@@ -139,8 +148,9 @@ main {
 .card-outer .face.back {
     z-index: 2;
     background-color: #ccc;
-    background-image: url(../img/card-back-01.gif);
-    background-size: 150%;
+    background-image: url(../img/card-back-01.png);
+    background-size: 100% 100%;
+    background-position: center;
 }
 
 /* HALL OF FAME */
@@ -153,10 +163,9 @@ main {
     flex-basis: 20em;
     display: flex;
     flex-direction: column;
-    background-color: rgba(255,255,255,1);
+    background-color: rgba(255,255,255,.2);
     padding: 2em;
-    box-shadow: 0 .9em .5em -.6em rgba(0,0,0,.1)
-    ;
+    box-shadow: 0 .9em .5em -.6em rgba(0,0,0,.1);
 }
 .hall-of-fame ul {
     border-bottom: solid 2px var(--main-color);
@@ -172,6 +181,31 @@ main {
 }
 .player-score {
 
+}
+
+/* GAME OVER */
+.game-over {
+    flex-direction: column;
+    border-radius: var(--base-ui-radius);
+    flex-basis: 20em;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255,255,255,.2);
+    padding: 2em;
+    box-shadow: 0 .9em .5em -.6em rgba(0,0,0,.1);
+}
+.game-over form {
+   display: flex
+}
+.game-over input {
+    border-radius: var(--base-ui-radius) 0 0 var(--base-ui-radius);
+    border: none;
+    padding: 1em;
+}
+.game-over .btn {
+    border-radius: 0 var(--base-ui-radius) var(--base-ui-radius) 0;
+    border: none;
+    padding: 1em;
 }
 
 /* UI */

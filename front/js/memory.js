@@ -15,7 +15,7 @@ const memory = {
   // Parametres de jeu
   timeLimit: 240, // temps alloué pour jouer en secondes
   cardDisplayTime: 1, // temps d'affichage d'une paire de carte retournée en secondes
-  numberOfCardPairs: 2, // nombre de paires de cartes (max 18 en l'état)
+  numberOfCardPairs: 18, // nombre de paires de cartes (max 18 en l'état)
 
   // Elements du dom
   gameElement: document.querySelector('.game'), // la zone globale, qui change de state

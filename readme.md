@@ -70,13 +70,13 @@ En s'appuyant sur la maquette, intégrer la vue principale de l'application.
 
 :bulb: *Astuce  : flex est ton ami !*
 
-L'idée est d'imaginer une carte qui a 2 états : affichée/masquée. Une classe css associée permetterait de basculer d'un état à l'autre.
+L'idée est d'imaginer une carte qui possède 2 états : affichée/masquée. Une classe css associée permetterait de basculer d'un état à l'autre.
 
-Exploiter le principe des "sprites Sheets" : une seule image combine differents éléments visuels, grâce aux propriétés css de positionnement et de taills de backgrounds, il est possible de n'afficher que la partie qui nous interresse :)
+Exploiter le principe des "sprites Sheets" : une seule image combine differents éléments visuels, grâce aux propriétés css de positionnement et de tailles de backgrounds, il est possible de n'afficher que la partie qui nous interresse :)
 
 Ne pas hésiter à utiliser des attributs personnalisés pour définir des états applicatifs dans la vue.
 
-**Petit bonus technique** : il est possible de créer un effet "3D Card Flip" en pure css, en utilisant les propriétés de transformation 3D et la perspective.
+**Petit bonus technique** : il est possible de créer un effet "3D Card Flip" en pur css, en utilisant les propriétés de transformation 3D et la perspective.
 
 ## 3 - dynamisation de l'affichage : js en front
 
