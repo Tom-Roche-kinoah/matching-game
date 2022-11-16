@@ -7,7 +7,8 @@ const memory = {
   // Propriétés générales
   gameState: 1, // le jeu possède 3 états (hall of fame/jeu/game over)
   currentPair: [], // tableau qui contient les 2 cartes en cours d'affichage
-  discoverPairs: [], // tableau des id des paires actuellement découvertes
+  currentScore: 0, // nombre de paires découvertes
+  currentTime: 0, // chrono en cours
   hallOfFame: [], // le tableau des milleurs scores
   apiBaseUrl: "xxx", // url à requeter pour la gestion des scores
 
@@ -17,11 +18,15 @@ const memory = {
   numberOfCardPairs: 18, // nombre de paires de cartes
 
   // Elements du dom
-  cardsGrid: document.querySelector('.cards'), // la zone qui reçoit les cartes
-
+  cardsGridElement: document.querySelector('.cards'), // la zone qui reçoit les cartes
+  scoreDisplayElement: document.querySelector('.score .ui-element-content'), // le texte du score
+  timerDisplayElement: document.querySelector('.timer .ui-element-content'), // le texte du temps
+  timerBarElement: document.querySelector('.timer-bar .bar'), // la barre de temps
 
   // Méthode d'initialisation de l'app
   init: () => {
+    memory.gameTimeOut();
+    memory.displayScore();
     memory.dealCards();
     console.log('Jeu Chargé');
   },
@@ -75,7 +80,7 @@ const memory = {
     // attacher l'événement au click
     cardElement.addEventListener('click', memory.handleCardClick);
     // injecter l'élément dans le dom
-    memory.cardsGrid.appendChild(cardElement);
+    memory.cardsGridElement.appendChild(cardElement);
   },
 
   // evenement click sur une carte
@@ -120,6 +125,8 @@ const memory = {
         // on ajoute la class css 'discovered'
         card.classList.add('discovered');
       });
+      // on ajoute un point au score
+      memory.scoreUp();
       // puis on vide le comparateur
       memory.resetCurrentPair();
     } else {
@@ -144,6 +151,31 @@ const memory = {
   // vider le comparateur de carte
   resetCurrentPair: () => {
     memory.currentPair = [];
+  },
+
+  // ajouter 1 point au score
+  scoreUp: () => {
+    memory.currentScore ++;
+    memory.displayScore();
+  },
+
+  // afficher le score dans l'ui
+  displayScore: () => {
+    const score = `${memory.currentScore}/${memory.numberOfCardPairs}`
+    memory.scoreDisplayElement.textContent = score;
+  },
+
+  // chrono 
+  gameTimeOut: () => {
+    const timeLimit = memory.timeLimit * 1000;
+    let currentTime = 0;
+    let currentSeconds = 0;
+    const gameTimer = setInterval(() => {
+      currentTime++;
+      currentSeconds = Math.floor(currentTime * 0.1);
+      memory.timerDisplayElement.textContent = `${currentSeconds}s`;
+      memory.timerBarElement.style.width = `${currentTime / memory.timeLimit * 100 * 0.1}%`;
+    }, 100);
   },
 
 

@@ -145,18 +145,23 @@ const memory = {
 
 On doit distribuer N x 2 cartes, ou N est le nombre de paires parametrées.
 
-Il existe plusiseurs manières de créer N éléments puis de les injecter dans le dom.
+Il existe plusieurs manières de créer N éléments puis de les injecter dans le dom.
 
 Nous choisirons la méthode qui consiste à s'appuyer sur un tableau (array) de carte randomisé, sur lequel nous itérerons la création des cartes avec par exemple une boucle `foreach`
 
 ##### Etape 3 : Logique d'affichage et de comparaison d'une paire visible
 
-Le but maintenant est de rendre interactive chaque carte, en leur attachant un evenement click, qui déclenchera un certain nombre d'actions :
+Le but maintenant est de rendre interactive chaque carte, en leur attachant un évenement click, qui déclenchera un certain nombre d'actions :
 - La carte doit se retourner (ajout d'une classe css)
 - La carte doit se stocker dans un comparateur
 - Si la carte est la 2eme du comparateur, alors il faut évaluer s'il s'agit d'une paire
+- s'il s'agit bien d'une paire, on les laisse affichées et on désactive leur event
+- si ce n'est pas une paire, le jeu les cache au bout de x secondes
 
 :warning: Attention : Que se passe t'il si on clique 2x de suite sur la meme carte ?
+
+##### Etape 4 : Logique de scoring et de condition de fin de jeu
+
 
 
 ## 4 - persistance des données : js en back, postgresql
