@@ -191,7 +191,7 @@ Un paramètre `currentScore` que l'on incrémente de 1 à chaque bonne paire tro
 
 ###### Timer
 Pour le timer, il faut utiliser une methode JS qui permet d'executer des actions toutes les x valeurs de temps.\
-Comme la classique `setINterval()` ou la plus récente `requestAnimationFrame()`
+Comme la classique `setInterval()` ou la plus récente `requestAnimationFrame()`
 
 Là encore, nous pouvons nous inspirer du game design, en imaginant un moteur qui tournerait sans cesse (l'interval) et qui en fonction des 'etats machine' executerait telle ou telle action.
 

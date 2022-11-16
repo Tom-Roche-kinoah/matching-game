@@ -213,6 +213,11 @@ const memory = {
 
   // afficher le contenu du Hall of Fame avec la data
   displayHallOfFamePlayers: () => {
+    // tri du tableau Hall of Fame par score croissant
+    memory.hallOfFame.sort((p1, p2) => p1.playerScore - p2.playerScore );
+    
+    // ne garder que les 10 premiers
+
     // on vide la zone du dom 
     memory.HallOfFameListElement.innerHTML = '';
     // pour chaque joueur de la liste
@@ -230,9 +235,12 @@ const memory = {
   // lorsque le joueur soumets son score
   handleSubmitScoreForm: () => {
     document.querySelector('.player-score-form').addEventListener('submit', (e) => {
+      // Empecher le rechargement de page par défaut
       e.preventDefault();
-      const playerName = e.target.playerName.value;
-      const playerScore = memory.currentScore;
+      // Collecter les infos pour construire l'objet 'player'
+      const playerName = memory.sanitizeInput(e.target.playerName.value); // la methode sanitizeInput nettoie les balises problématiques
+      const playerScore = Math.floor(memory.currentTime * 0.1);
+      // Dans cet objet, clés et valeurs ont le meme nom, on peut réduire le code avec un peu de sucre syntaxique 
       const player = { 
         playerName,
         playerScore
@@ -327,8 +335,10 @@ const memory = {
     memory.displayTimeBarProgress();
   },
 
-
+  // ------------
   // utilitaires
+  // ------------
+
   // mélanger un array
   shuffleArray: (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -337,6 +347,11 @@ const memory = {
       array[i] = array[j];
       array[j] = temp;
     }
+  },
+
+  // nettoyage des saisies
+  sanitizeInput: (input) => {
+    return input.replace( /(<([^>]+)>)/ig, '').trim();
   },
 
 };
