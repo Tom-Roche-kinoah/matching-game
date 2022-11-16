@@ -158,9 +158,47 @@ Le but maintenant est de rendre interactive chaque carte, en leur attachant un �
 - s'il s'agit bien d'une paire, on les laisse affichées et on désactive leur event
 - si ce n'est pas une paire, le jeu les cache au bout de x secondes
 
-:warning: Attention : Que se passe t'il si on clique 2x de suite sur la meme carte ?
+:warning: : Que se passe t'il si on clique 2x de suite sur la meme carte ?
+:warning: : Que se passe t'il si deja 2 cartes sont visibles et qu'une nouvelle est cliquée ?
+
+Souvent en game design, on utilise un principe 'd'états machine', on peut l'appliquer dans cet exercice, à notre mesure, en décrivant par exemple des états qui autorisent à jouer ou non. Ce qui permet de vérifier si le joueur à le droit d'effectuer une action.
+
+Par ex. dans notre application :
+```JS
+const memory = {
+    areCardsClickable: true, // le joueur a til le droit de cliquer sur les cartes ?
+
+    // ...
+
+    // au clic sur une carte
+    onCardClick: (card) => {
+        // si j'ai le droit
+        if (memory.areCardsClickable) {
+            // j'appelle une méthode qui dévoilera cette carte
+            memory.flipCards(card, true);
+        }
+        // sinon, il ne se passe rien
+    },
+}
+```
+
 
 ##### Etape 4 : Logique de scoring et de condition de fin de jeu
+
+###### Score
+Pour marquer des points, il faut découvrir une paire de cartes identiques.\
+Un paramètre `currentScore` que l'on incrémente de 1 à chaque bonne paire trouvée fera l'affaire.
+
+###### Timer
+Pour le timer, il faut utiliser une methode JS qui permet d'executer des actions toutes les x valeurs de temps.\
+Comme la classique `setINterval()` ou la plus récente `requestAnimationFrame()`
+
+Là encore, nous pouvons nous inspirer du game design, en imaginant un moteur qui tournerait sans cesse (l'interval) et qui en fonction des 'etats machine' executerait telle ou telle action.
+
+###### Fin de jeu
+Pour chaque action du joueur, ou du temps qui passe, il faut vérifier si le jeu est terminé. Soit par un echec (temps écoulé) soit par une victoire (toutes les paires découvertes)
+
+Il faut donc écrire une méthode qui fera ces vérifications dès que nécéssaire.
 
 
 

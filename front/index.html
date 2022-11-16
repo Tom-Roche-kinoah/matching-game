@@ -36,17 +36,15 @@
 
             <section class="game-over">
                 <h2 class="section-title">Game Over !</h2>
-                <form action="#" method="post" class="player-score">
                     <p>Temps écoulé...</p>
-                </form>
                 <button class="btn close-btn">✖</button>
             </section>
 
             <section class="victory">
                 <h2 class="section-title">Victoire !</h2>
                 <p class="message"></p>
-                <form action="#" method="post" class="player-score">
-                    <input type="text" name="playerName" placeholder="Ton blaze">
+                <form action="" method="post" class="player-score-form">
+                    <input type="text" name="playerName" placeholder="Ton blaze" required minlength="3">
                     <button type="submit" class="btn">Sauvegarder</button>
                 </form>
             </section>

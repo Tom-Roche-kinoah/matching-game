@@ -33,6 +33,7 @@ const memory = {
     memory.gameTimeEngine();
     memory.handleNewGame();
     memory.handleCloseGameOver();
+    memory.handleSubmitScoreForm();
     memory.displayScore();
     memory.dealCards();
     console.log('Jeu Chargé');
@@ -208,6 +209,15 @@ const memory = {
     memory.victoryMessageElement.textContent = `${memory.currentScore} paires trouvées en ${Math.floor(memory.currentTime * 0.1)} secondes`;
   },
 
+  // lorsque le joueur soumets son score
+  handleSubmitScoreForm: () => {
+    document.querySelector('.player-score-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      memory.resetGame();
+      memory.setGameState(1);
+    })
+  },
+
   // fermer le panneau game over, retour à l'accueil
   handleCloseGameOver: () => {
     document.querySelector('.game-over .btn').addEventListener('click', () => {
@@ -286,7 +296,7 @@ const memory = {
     memory.hallOfFame = [];
     // on vide la zone de jeu
     memory.cardsGridElement.innerHTML = '';
-    // on reset les affchages
+    // on reset les affichages
     memory.displayScore();
     memory.displayTimer();
     memory.displayTimeBarProgress();
