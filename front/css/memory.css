@@ -72,9 +72,13 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(255,255,255,.2);
+    background-color: rgba(255,255,255,.5);
     padding: 2em;
     box-shadow: 0 .9em .5em -.6em rgba(0,0,0,.1);
+}
+.section-title {
+    margin-bottom: 1em;
+    text-align: center;
 }
 
 /* CARDS */
@@ -168,10 +172,6 @@ main {
 }
 
 /* HALL OF FAME */
-.section-title {
-    margin-bottom: 1em;
-    text-align: center;
-}
 .hall-of-fame {
     flex-basis: 20em;
 }
@@ -193,7 +193,7 @@ main {
 
 /* VICTORY */
 .victory {
-    flex-basis: 20em;
+    flex-basis: 30em;
 }
 .victory form {
    display: flex
@@ -207,6 +207,11 @@ main {
     border-radius: 0 var(--base-ui-radius) var(--base-ui-radius) 0;
     border: none;
     padding: 1em;
+}
+.victory .message {
+    font-size: 1.2em;
+    margin-bottom: 1em;
+    font-weight: bold;
 }
 
 /* UI */
@@ -245,7 +250,7 @@ main {
     height: 100%;
     width: 0%;
     background-color: var(--main-color);
-    transition: 0.2s linear;
+    transition: 0.1s linear;
 }
 
 .ui-element {

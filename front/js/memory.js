@@ -11,14 +11,14 @@ const memory = {
   areCardsClickable: true, // l'event de click est il disponible
   isGameActive: true,      // le jeu est il en cours
   currentScore: 0,         // nombre de paires découvertes
-  currentTime: 0,          // chrono en cours en secondes
+  currentTime: 0,          // chrono en cours en 10e de secondes
   hallOfFame: [],          // le tableau des milleurs scores
   apiBaseUrl: "xxx",       // url à requeter pour la gestion des scores
 
   // Parametres de jeu
-  timeLimit: 30,        // temps alloué pour jouer en secondes
-  cardDisplayTime: 1,    // temps d'affichage d'une paire de carte retournée en secondes
-  numberOfCardPairs: 4, // nombre de paires de cartes (max 18 en l'état)
+  timeLimit: 15,           // temps alloué pour jouer en secondes
+  cardDisplayTime: 1,      // temps d'affichage d'une paire de carte retournée en secondes
+  numberOfCardPairs: 2,    // nombre de paires de cartes (max 18 en l'état)
 
   // Elements du dom (les éléments auquels on a besoin d'acceder régulièrement)
   gameElement: document.querySelector('.game'), // la zone globale, qui change de state
@@ -26,10 +26,12 @@ const memory = {
   scoreDisplayElement: document.querySelector('.score .ui-element-content'), // le texte du score
   timerDisplayElement: document.querySelector('.timer .ui-element-content'), // le texte du temps
   timerBarElement: document.querySelector('.timer-bar .bar'), // la barre de temps
+  victoryMessageElement: document.querySelector('.victory .message'), // la barre de temps
 
   // Méthode d'initialisation de l'app
   init: () => {
     memory.gameTimeEngine();
+    memory.handleNewGame();
     memory.displayScore();
     memory.dealCards();
     console.log('Jeu Chargé');
@@ -189,18 +191,39 @@ const memory = {
     memory.scoreDisplayElement.textContent = score;
   },
 
+  // animer la barre de progression du temps dans l'ui
+  displayTimeBarProgress: () => {
+    let percentage = memory.currentTime / memory.timeLimit * 10;
+    memory.timerBarElement.style.width = `${percentage}%`;
+  },
+
+  // afficher le compteur de temps dans l'ui
+  displayTimer: () => {
+    memory.timerDisplayElement.textContent = `${Math.floor(memory.currentTime * 0.1)}s`;
+  },
+
+  // afficher le message de victoire personnalisé
+  displayVictoryMessage: () => {
+    memory.victoryMessageElement.textContent = `${memory.currentScore} paires trouvées en ${Math.floor(memory.currentTime * 0.1)} secondes`;
+  },
+
+  // changer l'état du jeu
+  setGameState: (state) => {
+    memory.gameState = state;
+    memory.gameElement.dataset.gameState = memory.gameState;
+  },
+
   // Time engine : gestion du chrono et des events basés sur le temps 
   gameTimeEngine: () => {
-    const timeLimit = memory.timeLimit * 1000;
-    let currentTime = 0;
-    let currentSeconds = 0;
+    // le moteur tourne en permanence
     const gameTimer = setInterval(() => {
+      // actions qui sont executées seulement si le jeu est actif
       if (memory.isGameActive) {
-        currentTime++;
-        currentSeconds = Math.floor(currentTime * 0.1);
-        memory.currentTime = currentSeconds;
-        memory.timerDisplayElement.textContent = `${currentSeconds}s`;
-        memory.timerBarElement.style.width = `${currentTime / memory.timeLimit * 100 * 0.1}%`;
+        // on incrémente le timer de 1/10 de s
+        memory.currentTime++;
+        // on appelle les fonctions qui sont dépendantes du timer
+        memory.displayTimer();
+        memory.displayTimeBarProgress();
         memory.isGameOver();        
       }
     }, 100);
@@ -213,19 +236,39 @@ const memory = {
     // VICTOIRE
     // si toutes les paires ont été trouvées : score = paires distribuées
     if (memory.currentScore >= memory.numberOfCardPairs ) {
-      memory.gameElement.dataset.gameState = 4;
+      memory.setGameState(4);
+      memory.displayVictoryMessage();
       memory.isGameActive = false;
       memory.areCardsClickable = false;
     }
     
     // ECHEC
     // si le temps alloué est écoulé : temps actuel >= limite de temps
-    if (memory.currentTime >= memory.timeLimit ) {
-      memory.gameElement.dataset.gameState = 3;
+    if (memory.currentTime * 0.1 >= memory.timeLimit ) {
+      memory.setGameState(3);
       memory.isGameActive = false;
       memory.areCardsClickable = false;
       memory.flipCards(document.querySelectorAll('.card-outer'), true);
     }
+  },
+
+  handleNewGame: () => {
+    document.querySelector('.new-game-btn').addEventListener('click', () => memory.newGame());
+  },
+
+  newGame: () => {
+    // nouvelle partie, on réinitialise les propriétés
+    memory.setGameState(2);
+    memory.currentPair = [];
+    memory.areCardsClickable = true;
+    memory.isGameActive = true;
+    memory.currentScore = 0;
+    memory.currentTime = 0;
+    memory.hallOfFame = [];
+    // on vide la zone de jeu
+    memory.cardsGridElement.innerHTML = '';
+    // et on reditribue !
+    memory.dealCards();
   },
 
 
@@ -239,8 +282,6 @@ const memory = {
       array[j] = temp;
     }
   },
-  
-
 
 };
 
