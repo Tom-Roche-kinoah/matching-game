@@ -52,13 +52,15 @@ main {
 .game > section { display: none }
 [data-game-state="1"] .hall-of-fame { display: flex;}
 [data-game-state="2"] .cards { display: flex;}
+[data-game-state="3"] .game-over { display: flex;}
 
 /* CARDS */
 .cards {
     display: flex;
     flex-wrap: wrap; /* on autorise les items flex à revenir à la ligne si nécéssaire */
     width: calc(var(--card-size) * 9);
-    /* on souhaite 9 items par ligne, donc on définit la largeur à 9x largeur d'un item */
+    /* on souhaite 9 items par ligne pour 18 paires, donc on définit la largeur à 9x largeur d'un item */
+    justify-content: center;
 }
 .card-outer {
     width: var(--card-size);
@@ -153,6 +155,8 @@ main {
     flex-direction: column;
     background-color: rgba(255,255,255,1);
     padding: 2em;
+    box-shadow: 0 .9em .5em -.6em rgba(0,0,0,.1)
+    ;
 }
 .hall-of-fame ul {
     border-bottom: solid 2px var(--main-color);
@@ -215,7 +219,7 @@ main {
     line-height: 1.4em;
 }
 .timer {
-    width: 7em;
+    width: 9em;
 }
 .score {
     width: 10em;

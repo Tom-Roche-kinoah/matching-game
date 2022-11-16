@@ -15,9 +15,10 @@ const memory = {
   // Parametres de jeu
   timeLimit: 240, // temps alloué pour jouer en secondes
   cardDisplayTime: 1, // temps d'affichage d'une paire de carte retournée en secondes
-  numberOfCardPairs: 18, // nombre de paires de cartes
+  numberOfCardPairs: 2, // nombre de paires de cartes (max 18 en l'état)
 
   // Elements du dom
+  gameElement: document.querySelector('.game'), // la zone globale, qui change de state
   cardsGridElement: document.querySelector('.cards'), // la zone qui reçoit les cartes
   scoreDisplayElement: document.querySelector('.score .ui-element-content'), // le texte du score
   timerDisplayElement: document.querySelector('.timer .ui-element-content'), // le texte du temps
@@ -157,6 +158,7 @@ const memory = {
   scoreUp: () => {
     memory.currentScore ++;
     memory.displayScore();
+    memory.isGameOver();
   },
 
   // afficher le score dans l'ui
@@ -176,6 +178,12 @@ const memory = {
       memory.timerDisplayElement.textContent = `${currentSeconds}s`;
       memory.timerBarElement.style.width = `${currentTime / memory.timeLimit * 100 * 0.1}%`;
     }, 100);
+  },
+
+  isGameOver: () => {
+    if (memory.currentScore >= memory.numberOfCardPairs ) {
+      memory.gameElement.dataset.gameState = 3;
+    }
   },
 
 
