@@ -4,22 +4,24 @@ const memory = {
   // ------------
   // Propriétés
   // ------------
+
   // Propriétés générales
-  gameState: 1, // le jeu possède 3 états (hall of fame/jeu/game over)
-  currentPair: [], // tableau qui contient les 2 cartes en cours d'affichage
-  currentScore: 0, // nombre de paires découvertes
-  currentTime: 0, // chrono en cours
-  hallOfFame: [], // le tableau des milleurs scores
-  apiBaseUrl: "xxx", // url à requeter pour la gestion des scores
+  gameState: 1,            // le jeu possède 3 états (hall-of-fame/jeu/game-over)
+  currentPair: [],         // tableau qui contient les 2 cartes en cours d'affichage
+  areCardsClickable: true, // l'event de click est il disponible
+  currentScore: 0,         // nombre de paires découvertes
+  currentTime: 0,          // chrono en cours
+  hallOfFame: [],          // le tableau des milleurs scores
+  apiBaseUrl: "xxx",       // url à requeter pour la gestion des scores
 
   // Parametres de jeu
-  timeLimit: 240, // temps alloué pour jouer en secondes
-  cardDisplayTime: 1, // temps d'affichage d'une paire de carte retournée en secondes
-  numberOfCardPairs: 18, // nombre de paires de cartes (max 18 en l'état)
+  timeLimit: 240,        // temps alloué pour jouer en secondes
+  cardDisplayTime: 1,    // temps d'affichage d'une paire de carte retournée en secondes
+  numberOfCardPairs: 4, // nombre de paires de cartes (max 18 en l'état)
 
-  // Elements du dom
+  // Elements du dom (les éléments auquels on a besoin d'acceder régulièrement)
   gameElement: document.querySelector('.game'), // la zone globale, qui change de state
-  cardsGridElement: document.querySelector('.cards'), // la zone qui reçoit les cartes
+  cardsGridElement: document.querySelector('.cards'), // la zone où l'on distribue les cartes
   scoreDisplayElement: document.querySelector('.score .ui-element-content'), // le texte du score
   timerDisplayElement: document.querySelector('.timer .ui-element-content'), // le texte du temps
   timerBarElement: document.querySelector('.timer-bar .bar'), // la barre de temps
@@ -67,7 +69,7 @@ const memory = {
     const cardElement = document.createElement('div');
     // ajouter sa classe css
     cardElement.classList.add('card-outer');
-    // ajouter son id de pair en data-id
+    // ajouter son id de paire en data-id
     cardElement.dataset.id = cardId;
     // ajouter son numéro de carte en data-number
     cardElement.dataset.number = cardNumber;
@@ -91,15 +93,18 @@ const memory = {
 
   // au clic sur une carte
   onCardClick: (card) => {
-    card.classList.add('visible');
-    memory.addToCurrentPair(card);
+    if (memory.areCardsClickable) {
+      memory.flipCards([card], true);
+      memory.addToCurrentPair(card);
+    }
   },
 
   // logique de stockage de la paire en cours
   addToCurrentPair: (card) => {
-    // si la carte est recliquée, on ignore
+    // si la première carte est recliquée, on ignore
     if (memory.currentPair.length === 1 && memory.currentPair[0] === card) {
       console.error('carte déja cliquée...');
+      // le return ici termine la fonction
       return;
     }
     // on ajoute la carte au comparateur 
@@ -108,14 +113,16 @@ const memory = {
 
     // si le comparateur contient 2 cartes 
     if (memory.currentPair.length === 2) {
-      console.log('2 cartes affichées, on check si c\'est une paire');
       // on vérifie si c'est une paire
+      console.log('2 cartes affichées, on check si c\'est une paire');
       memory.checkIfGoodPair();
     }
   },
 
   // vérifier si la paire visible est valide (2 id identiques)
   checkIfGoodPair: () => {
+    // une paire est affichée, on désactive le click sur les cartes
+    memory.areCardsClickable = false;
     // si les cartes du comparateur ont le meme id
     if (memory.currentPair[0].dataset.id === memory.currentPair[1].dataset.id) {
       console.log('Yes ! C\'est une paire !');
@@ -130,6 +137,8 @@ const memory = {
       memory.scoreUp();
       // puis on vide le comparateur
       memory.resetCurrentPair();
+      // et on réactive le click sur les cartes
+      memory.areCardsClickable = true;
     } else {
       // si ce n'est pas une paire, on les cache à la fin du délai
       console.log('C\'est pas une paire...');
@@ -142,11 +151,23 @@ const memory = {
     const displayTime = memory.cardDisplayTime * 1000;
     const displayTimer = setTimeout(() => {
       console.log('On les cache');
-      memory.currentPair.forEach(card => {
-        card.classList.remove('visible');
-      });
+      memory.flipCards(memory.currentPair, false);
       memory.resetCurrentPair();
+      memory.areCardsClickable = true;
+      clearTimeout(displayTimer);
     }, displayTime);
+  },
+
+  /**
+   * retourner (montrer ou cacher) des cartes 
+   * @param {array} cardsArray est un tableau de cartes à retourner (flip)
+   * @param {boolean} visible est un boolean pour indiquer le sens final du retournement, true : affiché, false : caché
+   */
+  flipCards: (cardsArray, visible) => {
+      cardsArray.forEach(card => {
+        if (visible) card.classList.add('visible');
+        else card.classList.remove('visible');
+      });
   },
 
   // vider le comparateur de carte
@@ -180,6 +201,7 @@ const memory = {
     }, 100);
   },
 
+  // le jeu est il fini ?
   isGameOver: () => {
     if (memory.currentScore >= memory.numberOfCardPairs ) {
       memory.gameElement.dataset.gameState = 3;
