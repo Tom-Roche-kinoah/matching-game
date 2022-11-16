@@ -62,6 +62,20 @@ main {
 [data-game-state="1"] .hall-of-fame { display: flex;}
 [data-game-state="2"] .cards { display: flex;}
 [data-game-state="3"] .game-over { display: flex;}
+[data-game-state="4"] .victory { display: flex;}
+
+.hall-of-fame,
+.game-over,
+.victory {
+    border-radius: var(--base-ui-radius);
+    flex-basis: 20em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255,255,255,.2);
+    padding: 2em;
+    box-shadow: 0 .9em .5em -.6em rgba(0,0,0,.1);
+}
 
 /* CARDS */
 .cards {
@@ -159,13 +173,7 @@ main {
     text-align: center;
 }
 .hall-of-fame {
-    border-radius: var(--base-ui-radius);
     flex-basis: 20em;
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(255,255,255,.2);
-    padding: 2em;
-    box-shadow: 0 .9em .5em -.6em rgba(0,0,0,.1);
 }
 .hall-of-fame ul {
     border-bottom: solid 2px var(--main-color);
@@ -183,26 +191,19 @@ main {
 
 }
 
-/* GAME OVER */
-.game-over {
-    flex-direction: column;
-    border-radius: var(--base-ui-radius);
+/* VICTORY */
+.victory {
     flex-basis: 20em;
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(255,255,255,.2);
-    padding: 2em;
-    box-shadow: 0 .9em .5em -.6em rgba(0,0,0,.1);
 }
-.game-over form {
+.victory form {
    display: flex
 }
-.game-over input {
+.victory input {
     border-radius: var(--base-ui-radius) 0 0 var(--base-ui-radius);
     border: none;
     padding: 1em;
 }
-.game-over .btn {
+.victory .btn {
     border-radius: 0 var(--base-ui-radius) var(--base-ui-radius) 0;
     border: none;
     padding: 1em;

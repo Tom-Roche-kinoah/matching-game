@@ -6,16 +6,17 @@ const memory = {
   // ------------
 
   // Propriétés générales
-  gameState: 1,            // le jeu possède 3 états (hall-of-fame/jeu/game-over)
+  gameState: 1,            // le jeu possède 4 états (hall-of-fame 1/game 2/time-out 3/victory 4)
   currentPair: [],         // tableau qui contient les 2 cartes en cours d'affichage
   areCardsClickable: true, // l'event de click est il disponible
+  isGameActive: true,      // le jeu est il en cours
   currentScore: 0,         // nombre de paires découvertes
-  currentTime: 0,          // chrono en cours
+  currentTime: 0,          // chrono en cours en secondes
   hallOfFame: [],          // le tableau des milleurs scores
   apiBaseUrl: "xxx",       // url à requeter pour la gestion des scores
 
   // Parametres de jeu
-  timeLimit: 240,        // temps alloué pour jouer en secondes
+  timeLimit: 30,        // temps alloué pour jouer en secondes
   cardDisplayTime: 1,    // temps d'affichage d'une paire de carte retournée en secondes
   numberOfCardPairs: 4, // nombre de paires de cartes (max 18 en l'état)
 
@@ -28,7 +29,7 @@ const memory = {
 
   // Méthode d'initialisation de l'app
   init: () => {
-    memory.gameTimeOut();
+    memory.gameTimeEngine();
     memory.displayScore();
     memory.dealCards();
     console.log('Jeu Chargé');
@@ -188,23 +189,42 @@ const memory = {
     memory.scoreDisplayElement.textContent = score;
   },
 
-  // chrono 
-  gameTimeOut: () => {
+  // Time engine : gestion du chrono et des events basés sur le temps 
+  gameTimeEngine: () => {
     const timeLimit = memory.timeLimit * 1000;
     let currentTime = 0;
     let currentSeconds = 0;
     const gameTimer = setInterval(() => {
-      currentTime++;
-      currentSeconds = Math.floor(currentTime * 0.1);
-      memory.timerDisplayElement.textContent = `${currentSeconds}s`;
-      memory.timerBarElement.style.width = `${currentTime / memory.timeLimit * 100 * 0.1}%`;
+      if (memory.isGameActive) {
+        currentTime++;
+        currentSeconds = Math.floor(currentTime * 0.1);
+        memory.currentTime = currentSeconds;
+        memory.timerDisplayElement.textContent = `${currentSeconds}s`;
+        memory.timerBarElement.style.width = `${currentTime / memory.timeLimit * 100 * 0.1}%`;
+        memory.isGameOver();        
+      }
     }, 100);
   },
 
   // le jeu est il fini ?
   isGameOver: () => {
+    // il existe 2 conditions de fin de jeu
+
+    // VICTOIRE
+    // si toutes les paires ont été trouvées : score = paires distribuées
     if (memory.currentScore >= memory.numberOfCardPairs ) {
+      memory.gameElement.dataset.gameState = 4;
+      memory.isGameActive = false;
+      memory.areCardsClickable = false;
+    }
+    
+    // ECHEC
+    // si le temps alloué est écoulé : temps actuel >= limite de temps
+    if (memory.currentTime >= memory.timeLimit ) {
       memory.gameElement.dataset.gameState = 3;
+      memory.isGameActive = false;
+      memory.areCardsClickable = false;
+      memory.flipCards(document.querySelectorAll('.card-outer'), true);
     }
   },
 
