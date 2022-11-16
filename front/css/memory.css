@@ -72,7 +72,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(255,255,255,.5);
+    background-color: rgba(255,255,255,.7);
     padding: 2em;
     box-shadow: 0 .9em .5em -.6em rgba(0,0,0,.1);
 }
@@ -177,6 +177,7 @@ main {
 }
 .hall-of-fame ul {
     border-bottom: solid 2px var(--main-color);
+    width: 100%;
 }
 .hall-of-fame ul li {
     display: flex;
@@ -212,6 +213,19 @@ main {
     font-size: 1.2em;
     margin-bottom: 1em;
     font-weight: bold;
+}
+
+/* GAME OVER */
+.game-over {
+    padding: 5em;
+    position: relative;
+}
+.game-over .close-btn {
+    position: absolute;
+    padding: .5em;
+    line-height: 1em;
+    top: .5em;
+    right: .5em;
 }
 
 /* UI */

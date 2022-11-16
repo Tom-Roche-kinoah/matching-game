@@ -32,6 +32,7 @@ const memory = {
   init: () => {
     memory.gameTimeEngine();
     memory.handleNewGame();
+    memory.handleCloseGameOver();
     memory.displayScore();
     memory.dealCards();
     console.log('Jeu Chargé');
@@ -207,6 +208,14 @@ const memory = {
     memory.victoryMessageElement.textContent = `${memory.currentScore} paires trouvées en ${Math.floor(memory.currentTime * 0.1)} secondes`;
   },
 
+  // fermer le panneau game over, retour à l'accueil
+  handleCloseGameOver: () => {
+    document.querySelector('.game-over .btn').addEventListener('click', () => {
+      memory.resetGame();
+      memory.setGameState(1);
+    })
+  },
+
   // changer l'état du jeu
   setGameState: (state) => {
     memory.gameState = state;
@@ -258,17 +267,29 @@ const memory = {
 
   newGame: () => {
     // nouvelle partie, on réinitialise les propriétés
+    memory.resetGame();
+    // passage à la vue du jeu
     memory.setGameState(2);
-    memory.currentPair = [];
+    // et on reditribue !
+    memory.dealCards();
     memory.areCardsClickable = true;
     memory.isGameActive = true;
+  },
+
+  resetGame: () => {
+    // réinitilisation des propriétés
+    memory.currentPair = [];
+    memory.areCardsClickable = false;
+    memory.isGameActive = false;
     memory.currentScore = 0;
     memory.currentTime = 0;
     memory.hallOfFame = [];
     // on vide la zone de jeu
     memory.cardsGridElement.innerHTML = '';
-    // et on reditribue !
-    memory.dealCards();
+    // on reset les affchages
+    memory.displayScore();
+    memory.displayTimer();
+    memory.displayTimeBarProgress();
   },
 
 
