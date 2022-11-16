@@ -8,11 +8,11 @@ const memory = {
   // Propriétés générales
   gameState: 1,            // le jeu possède 4 états (hall-of-fame 1/game 2/time-out 3/victory 4)
   currentPair: [],         // tableau qui contient les 2 cartes en cours d'affichage
-  areCardsClickable: true, // l'event de click est il disponible
-  isGameActive: true,      // le jeu est il en cours
+  areCardsClickable: false, // l'event de click est il disponible
+  isGameActive: false,      // le jeu est il en cours
   currentScore: 0,         // nombre de paires découvertes
   currentTime: 0,          // chrono en cours en 10e de secondes
-  hallOfFame: [],          // le tableau des milleurs scores
+  hallOfFame: [{playerName: 'Camille', playerScore: 12},{playerName: 'Charly', playerScore: 27}], // le tableau des meilleurs scores
   apiBaseUrl: "xxx",       // url à requeter pour la gestion des scores
 
   // Parametres de jeu
@@ -27,9 +27,11 @@ const memory = {
   timerDisplayElement: document.querySelector('.timer .ui-element-content'), // le texte du temps
   timerBarElement: document.querySelector('.timer-bar .bar'), // la barre de temps
   victoryMessageElement: document.querySelector('.victory .message'), // la barre de temps
+  HallOfFameListElement: document.querySelector('.player-list'), // le Hall of Fame
 
   // Méthode d'initialisation de l'app
   init: () => {
+    memory.displayHallOfFamePlayers();
     memory.gameTimeEngine();
     memory.handleNewGame();
     memory.handleCloseGameOver();
@@ -209,10 +211,34 @@ const memory = {
     memory.victoryMessageElement.textContent = `${memory.currentScore} paires trouvées en ${Math.floor(memory.currentTime * 0.1)} secondes`;
   },
 
+  // afficher le contenu du Hall of Fame avec la data
+  displayHallOfFamePlayers: () => {
+    // on vide la zone du dom 
+    memory.HallOfFameListElement.innerHTML = '';
+    // pour chaque joueur de la liste
+    memory.hallOfFame.forEach(player => {
+      const playerItemElement = document.createElement('li');
+      const playerItemContent = `
+          <span class="player-name">${player.playerName}</span>
+          <span class="player-score">${player.playerScore}s</span>
+      `;
+      playerItemElement.innerHTML = playerItemContent;
+      memory.HallOfFameListElement.appendChild(playerItemElement);
+    });
+  },
+
   // lorsque le joueur soumets son score
   handleSubmitScoreForm: () => {
     document.querySelector('.player-score-form').addEventListener('submit', (e) => {
       e.preventDefault();
+      const playerName = e.target.playerName.value;
+      const playerScore = memory.currentScore;
+      const player = { 
+        playerName,
+        playerScore
+      };
+      memory.hallOfFame.push(player);
+      memory.displayHallOfFamePlayers();
       memory.resetGame();
       memory.setGameState(1);
     })
@@ -293,7 +319,6 @@ const memory = {
     memory.isGameActive = false;
     memory.currentScore = 0;
     memory.currentTime = 0;
-    memory.hallOfFame = [];
     // on vide la zone de jeu
     memory.cardsGridElement.innerHTML = '';
     // on reset les affichages
