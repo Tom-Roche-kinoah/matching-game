@@ -86,7 +86,9 @@ Ne pas hésiter à utiliser des attributs personnalisés pour définir des état
 
 Nous avons besoin d'un fichier **memory.js** à lier au html.
 
-Créons le dans le répertoire approprié `front/js/` puis relions le au html avec la balise `<script src="js/memory.js" defer></script>` dans le head du document.
+Créons le dans le répertoire approprié `front/js/` puis relions le au html avec la balise \
+ `<script src="js/memory.js" defer></script>` \
+ dans le head du document.
 
 Note : placé dans le head, le js qui va manipuler le dom, doit attendre que celui-ci soit entièrement chargé dans le navigateur avant de s'executer, c'est le rôle de la propriété `defer` utilisée ici.
 
@@ -114,6 +116,8 @@ L'application possède 3 états de jeu principaux :
 - Accueil : affiche le Hall Of Fame
 - Game : on joue !
 - Game Over : on ne joue plus... et on rentre son blaze si on a scoré :sunglasses:
+
+*( peut-etre d'autres états à découvrir ? )*
 
 On découvre ensuite quelques paramètres de jeu
 - la limite de temps d'une partie
@@ -160,15 +164,16 @@ Le but maintenant est de rendre interactive chaque carte, en leur attachant un �
 - s'il s'agit bien d'une paire, on les laisse affichées et on désactive leur event
 - si ce n'est pas une paire, le jeu les cache au bout de x secondes
 
-:warning: : Que se passe t'il si on clique 2x de suite sur la meme carte ?
-:warning: : Que se passe t'il si deja 2 cartes sont visibles et qu'une nouvelle est cliquée ?
+:warning:  Que se passe t'il si on clique 2x de suite sur la meme carte ?
+
+:warning:  Que se passe t'il si deja 2 cartes sont visibles et qu'une nouvelle est cliquée ?
 
 Souvent en game design, on utilise un principe 'd'états machine', on peut l'appliquer dans cet exercice, à notre mesure, en décrivant par exemple des états qui autorisent à jouer ou non. Ce qui permet de vérifier si le joueur à le droit d'effectuer une action.
 
 Par ex. dans notre application :
 ```JS
 const memory = {
-    areCardsClickable: true, // le joueur a til le droit de cliquer sur les cartes ?
+    areCardsClickable: true, // le joueur a t il le droit de cliquer sur les cartes ?
 
     // ...
 
@@ -243,7 +248,7 @@ CREATE TABLE IF NOT EXISTS "score"(
 );
 ```
 
-:warning: : Ne pas oublier de se positionner sur la bonne base de données avant de créer la table !
+:warning: Ne pas oublier de se positionner sur la bonne base de données avant de créer la table !
 
 #### Créer un peu de data de test
 ```SQL
@@ -364,4 +369,4 @@ A vous de finir :)
 
 - Une librairie comme React pourrait permettre de rationnaliser la partie front (mais dans ce contexte, sera plus complexe !)
 
-- Pour la persistance des données, nous aurions pu utiliser le module fs de node et simplement écrire dans un fichier.
+- Pour la persistance des données, nous aurions pu utiliser le module fs de node et simplement écrire dans un fichier texte.
