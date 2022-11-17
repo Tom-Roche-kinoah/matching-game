@@ -1,0 +1,21 @@
+@hostname = http://localhost:5001
+
+###
+# Get all scores
+GET {{hostname}}/score/ HTTP/1.1
+content-type: application/json
+
+###
+# Get one score
+GET {{hostname}}/score/pqspd HTTP/1.1
+content-type: application/json
+
+###
+# Create one score
+POST {{hostname}}/score/ HTTP/1.1
+content-type: application/json
+
+{
+  "player_name": "John Doe",
+  "player_score": "23"
+}
