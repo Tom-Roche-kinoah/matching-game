@@ -324,4 +324,44 @@ A ce stade, avec le serveur démarré, en appelant dans notre navigateur : http:
 
 Pour terminer, il faut retourner dans le code du jeu, pour implémenter les requetes à l'api.
 
+
+
 ### Fetch mon ami !
+
+Adieu *XMLHttpRequest*, bonjour *fetch* !
+
+Pour récuperer les scores depuis l'application, c'est relativement simple :
+
+Créons une méthode asynchrone qui appelle l'url de notre serveur (par défaut en GET) et quand la promesse est résolue, nous rafraichissons le tableau Hall Of Fame.
+
+```JS
+fetchAllScore: async () => {
+    try {
+      const response = await fetch(`${memory.apiBaseUrl}/score`);
+      const scores = await response.json();
+      memory.hallOfFame = scores;    
+    } catch (error) {
+        console.error(error);
+    }
+  },
+```
+Pour l'ajout d'un score, il faudra fournir des paramètres à la requete fetch.
+
+https://developer.mozilla.org/fr/docs/Web/API/Fetch_API/Using_Fetch
+
+A vous de finir :)
+
+## Annexes
+
+### Captures
+![Capture animée](https://kinoah.com/memory/memory.gif)
+![Capture hall of fame](https://kinoah.com/memory/memory-screen-01.jpg)
+![Capture time out](https://kinoah.com/memory/memory-screen-02.jpg)
+![Capture win](https://kinoah.com/memory/memory-screen-03.jpg)
+
+### Alternatives techniques
+- Nous aurions pu utiliser un moteur de vue dans express, comme ejs, plutot qu'une SPA (Single Page Application)
+
+- Une librairie comme React pourrait permettre de rationnaliser la partie front (mais dans ce contexte, sera plus complexe !)
+
+- Pour la persistance des données, nous aurions pu utiliser le module fs de node et simplement écrire dans un fichier.
