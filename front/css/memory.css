@@ -83,14 +83,17 @@ main {
 
 /* CARDS */
 .cards {
+    font-size: 1em;
     display: flex;
     flex-wrap: wrap; /* on autorise les items flex à revenir à la ligne si nécéssaire */
     width: calc(var(--card-size) * 9);
     /* on souhaite 9 items par ligne pour 18 paires, donc on définit la largeur à 9x largeur d'un item */
     justify-content: center;
 }
+
 .card-outer {
     width: var(--card-size);
+    height: var(--card-size);
     padding: .5em;
     aspect-ratio: 1/1;
     /* 1/1 est un ratio carré, on pourrait utiliser 4/3 par ex. */
@@ -98,6 +101,8 @@ main {
     perspective: 10em;
     /* L'element card enfant, va pivoter sur l'axe Y, pour donner un effet 3D, on définit une perspective sur le parent */
 }
+
+
 .card-outer .card {
     border-radius: var(--card-radius);
     width: 100%;
@@ -140,7 +145,17 @@ main {
     background-size: 100%;
     background-position: 0 -100%;
 }
-
+@media (max-width:400px) {
+    .cards {
+        font-size: .5em;
+    }
+    .card-outer {
+        padding: .25em;
+    }
+    .card-outer:not(.discovered) .card:hover {
+        outline: none;
+    }
+}
 /* la face de la carte est déterminée par un attribut personnalisé data-card */
 /* on fait simplement glisser le sprite pour en afficher la bonne partie */
 .card-outer[data-id="1"] .face.front { background-position: 0 -100%; }
@@ -175,21 +190,30 @@ main {
 .hall-of-fame {
     flex-basis: 20em;
 }
-.hall-of-fame ul {
+.hall-of-fame ol {
     border-bottom: solid 2px var(--main-color);
     width: 100%;
+    list-style-type: none;
 }
-.hall-of-fame ul li {
+.hall-of-fame ol li .player{
     display: flex;
-    justify-content: space-between;
-    padding: .5em;
+    gap: 1em;
+    padding: .5em 1em;
     border-top: solid 2px var(--main-color);
+}
+.hall-of-fame ol li:first-child {
+    color: white;
+    background-color: #55A1CF;
+}
+.player-rank {
+    
 }
 .player-name {
     font-weight: bold;
+    text-align: start;
 }
 .player-score {
-
+    margin-left: auto;
 }
 
 /* VICTORY */
@@ -234,6 +258,7 @@ main {
     padding: 1rem 5rem;
     position: relative;
     display: flex;
+    gap: 1em;
     justify-content: space-between;
     align-items: center;
 }
@@ -288,4 +313,25 @@ main {
 .ui-element-content {
     color: var(--main-color);
     font-size: 2em;
+}
+
+@media (max-width:400px) {
+    .ui {
+        font-size: .7em;
+        padding: .5rem;
+        flex-wrap: wrap;
+    }
+    .ui .btn {
+        margin-top: .5em;
+        width: 100%;
+        font-size: 1.3em;
+    }
+    .timer,
+    .score {
+        width: fit-content;
+    }
+    .game-title {
+        font-size: 1.5em;
+        width: 100%;
+    }
 }

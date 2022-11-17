@@ -4,21 +4,33 @@ const memory = {
   // ------------
   // Propriétés
   // ------------
-
   // Propriétés générales
-  gameState: 1,            // le jeu possède 4 états (hall-of-fame 1/game 2/time-out 3/victory 4)
-  currentPair: [],         // tableau qui contient les 2 cartes en cours d'affichage
+  gameState: 1, // le jeu possède 4 états (hall-of-fame 1/game 2/time-out 3/victory 4)
+  currentPair: [], // tableau qui contient les 2 cartes en cours d'affichage
   areCardsClickable: false, // l'event de click est il disponible
-  isGameActive: false,      // le jeu est il en cours
-  currentScore: 0,         // nombre de paires découvertes
-  currentTime: 0,          // chrono en cours en 10e de secondes
-  hallOfFame: [{playerName: 'Camille', playerScore: 12},{playerName: 'Charly', playerScore: 27}], // le tableau des meilleurs scores
-  apiBaseUrl: "xxx",       // url à requeter pour la gestion des scores
+  isGameActive: false, // le jeu est il en cours
+  currentScore: 0, // nombre de paires découvertes
+  currentTime: 0, // chrono en cours en 10e de secondes
+  hallOfFame: [
+    {playerName: 'Camille', playerScore: 12},
+    {playerName: 'Cécile', playerScore: 13},
+    {playerName: 'Claudia', playerScore: 5},
+    {playerName: 'Léa', playerScore: 8},
+    {playerName: 'Justine', playerScore: 16},
+    {playerName: 'Albert', playerScore: 25},
+    {playerName: 'Julien', playerScore: 36},
+    {playerName: 'Maéva', playerScore: 10},
+    {playerName: 'Louis', playerScore: 10},
+    {playerName: 'Rémi', playerScore: 10},
+    {playerName: 'Tom', playerScore: 10},
+    {playerName: 'Charly', playerScore: 15}
+  ], // le tableau des meilleurs scores
+  apiBaseUrl: "xxx", // url à requeter pour la gestion des scores
 
   // Parametres de jeu
-  timeLimit: 15,           // temps alloué pour jouer en secondes
-  cardDisplayTime: 1,      // temps d'affichage d'une paire de carte retournée en secondes
-  numberOfCardPairs: 2,    // nombre de paires de cartes (max 18 en l'état)
+  timeLimit: 300, // temps alloué pour ue partie, en secondes
+  cardDisplayTime: 1, // temps d'affichage d'une paire de cartes retournée, en secondes
+  numberOfCardPairs: 4, // nombre de paires de cartes (max 18 en l'état)
 
   // Elements du dom (les éléments auquels on a besoin d'acceder régulièrement)
   gameElement: document.querySelector('.game'), // la zone globale, qui change de state
@@ -26,7 +38,7 @@ const memory = {
   scoreDisplayElement: document.querySelector('.score .ui-element-content'), // le texte du score
   timerDisplayElement: document.querySelector('.timer .ui-element-content'), // le texte du temps
   timerBarElement: document.querySelector('.timer-bar .bar'), // la barre de temps
-  victoryMessageElement: document.querySelector('.victory .message'), // la barre de temps
+  victoryMessageElement: document.querySelector('.victory .message'), // le message de victoire
   HallOfFameListElement: document.querySelector('.player-list'), // le Hall of Fame
 
   // Méthode d'initialisation de l'app
@@ -44,33 +56,32 @@ const memory = {
   // ------------
   // Méthodes
   // ------------
-
-  // créer le tableau d'id de cartes, et le retourner mélangé
+  // Créer le tableau d'id de cartes, et le retourner mélangé
   createArrayOfCards: () => {
     const arrayOfCards = [];
     // pour chaque paire de cartes
-    for (let i = 1; i <= memory.numberOfCardPairs; i++) {
+    for (let id = 1; id <= memory.numberOfCardPairs; id++) {
       // on ajoute 2x l'id dans le tableau
-      arrayOfCards.push(i, i); // par ex. pour 4 paires => [1, 1, 2, 2, 3, 3, 4, 4]
+      arrayOfCards.push(id, id); // par ex. pour 4 paires => [1, 1, 2, 2, 3, 3, 4, 4]
     }
     // puis on mélange le tableau
     memory.shuffleArray(arrayOfCards);
     return arrayOfCards;
   },
 
-  // distribuer les cartes
+  // Distribuer les cartes
   dealCards: () => {
-    // autant de fois que le double de 'numberOfCardPairs'
-    // créer et injecter une carte dans le dom
-    const pairsOfCards = memory.createArrayOfCards();
-    console.log(pairsOfCards);
-    pairsOfCards.forEach((cardId, index) => {
+    // créer le tableau d'id de carte
+    const cards = memory.createArrayOfCards();
+    // console.log(pairsOfCards);
+    // itérer sur le tableau d'id de carte
+    cards.forEach((cardId, index) => {
+      // créer une carte et l'injecter dans le dom
       memory.createCardElement(cardId, index);
     });
-
   },
 
-  // créer une carte
+  // Créer une carte
   createCardElement: (cardId, cardNumber) => {
     // créer l'élément
     const cardElement = document.createElement('div');
@@ -93,175 +104,208 @@ const memory = {
     memory.cardsGridElement.appendChild(cardElement);
   },
 
-  // evenement click sur une carte
+  // Evenement click sur une carte
   handleCardClick: (e) => {
+    // au clic, on récupère l'élément .card-outer le plus proche
     memory.onCardClick(e.target.closest(".card-outer"));
   },
 
-  // au clic sur une carte
+  // Au clic sur une carte
   onCardClick: (card) => {
+    // si les cartes sont cliquables
     if (memory.areCardsClickable) {
+      // Retourner la carte ciblée
       memory.flipCards([card], true);
+      // Ajouter la carte ciblée au comparateur
       memory.addToCurrentPair(card);
     }
   },
 
-  // logique de stockage de la paire en cours
+  // Stockage de la paire en cours
   addToCurrentPair: (card) => {
-    // si la première carte est recliquée, on ignore
+    // si la première carte est recliquée, ignorer l'evenement
+    // => si une seule carte présente dans le comparateur, ET si cette carte est identique à celle cliquée
     if (memory.currentPair.length === 1 && memory.currentPair[0] === card) {
-      console.error('carte déja cliquée...');
+      console.error('Carte déja cliquée...');
       // le return ici termine la fonction
       return;
     }
-    // on ajoute la carte au comparateur 
+
+    // ajouter la carte au comparateur 
     memory.currentPair.push(card);
-    //console.log(memory.currentPair);
 
     // si le comparateur contient 2 cartes 
     if (memory.currentPair.length === 2) {
-      // on vérifie si c'est une paire
+      // on vérifie si c'est une paire gagnante
       console.log('2 cartes affichées, on check si c\'est une paire');
       memory.checkIfGoodPair();
     }
   },
 
-  // vérifier si la paire visible est valide (2 id identiques)
+  // Vérifier si la paire visible est valide (2 id identiques)
   checkIfGoodPair: () => {
     // une paire est affichée, on désactive le click sur les cartes
     memory.areCardsClickable = false;
     // si les cartes du comparateur ont le meme id
     if (memory.currentPair[0].dataset.id === memory.currentPair[1].dataset.id) {
-      console.log('Yes ! C\'est une paire !');
+      // C'est une paire gagnante
+      console.log('🟢 Yes ! C\'est une paire !');
       // pour chaque carte du comparateur
       memory.currentPair.forEach(card => {
-        // on retire l'event de click
+        // on leur retire définitivement l'event de click
         card.removeEventListener('click', memory.handleCardClick);
         // on ajoute la class css 'discovered'
         card.classList.add('discovered');
       });
       // on ajoute un point au score
       memory.scoreUp();
-      // puis on vide le comparateur
+      // on vide le comparateur
       memory.resetCurrentPair();
-      // et on réactive le click sur les cartes
+      // puis on réactive le click sur les cartes restantes
       memory.areCardsClickable = true;
     } else {
-      // si ce n'est pas une paire, on les cache à la fin du délai
-      console.log('C\'est pas une paire...');
+      // sinon, ce n'est pas une paire gagnante, on les cache à la fin du délai
+      console.log('🔴 C\'est pas une paire...');
       memory.displayCardTimeOut();
     }
   },
 
-  // cacher les cartes au bout du délai
+  // Cacher la paire visible au bout du délai
   displayCardTimeOut: () => {
+    // Convertir le délai paramétré en ms
     const displayTime = memory.cardDisplayTime * 1000;
     const displayTimer = setTimeout(() => {
+      // toutes les actions dans le timeOut seront éxecutées apres 'displayTime' ms
       console.log('On les cache');
+      // flip, coté caché, de la paire courante
       memory.flipCards(memory.currentPair, false);
+      // Vider le comparateur
       memory.resetCurrentPair();
+      // Réactiver le click sur les cartes restantes
       memory.areCardsClickable = true;
       clearTimeout(displayTimer);
     }, displayTime);
   },
 
+  // exemple de JSdoc
   /**
-   * retourner (montrer ou cacher) des cartes 
+   * Retourner (montrer ou cacher) des cartes 
    * @param {array} cardsArray est un tableau de cartes à retourner (flip)
    * @param {boolean} visible est un boolean pour indiquer le sens final du retournement, true : affiché, false : caché
    */
   flipCards: (cardsArray, visible) => {
       cardsArray.forEach(card => {
-        if (visible) card.classList.add('visible');
-        else card.classList.remove('visible');
+        // exemple d'opérateur conditionnel (ternaire)
+        visible ? card.classList.add('visible') : card.classList.remove('visible');
       });
   },
 
-  // vider le comparateur de carte
+  // Vider le comparateur de carte
   resetCurrentPair: () => {
     memory.currentPair = [];
   },
 
-  // ajouter 1 point au score
+  // Ajouter 1 point au score
   scoreUp: () => {
+    // incrémentation de currentScore de 1 (++ équivalent à += 1, ou encore maVar = maVar + 1 )
     memory.currentScore ++;
+    // Mise à jour du score dans l'affichage
     memory.displayScore();
+    // Test de condition de victoire
     memory.isGameOver();
   },
 
-  // afficher le score dans l'ui
+  // Afficher le score dans l'ui
   displayScore: () => {
     const score = `${memory.currentScore}/${memory.numberOfCardPairs}`
     memory.scoreDisplayElement.textContent = score;
   },
 
-  // animer la barre de progression du temps dans l'ui
+  // Animer la barre de progression du temps dans l'ui
   displayTimeBarProgress: () => {
-    let percentage = memory.currentTime / memory.timeLimit * 10;
-    memory.timerBarElement.style.width = `${percentage}%`;
+    // la barre de temps remplit progressivement toute la largeur de l'ui
+    // cette largeur est variable, il faut donc convertir le temps absolu en %age
+    let percentage = memory.currentTime / memory.timeLimit * 100;
+    memory.timerBarElement.style.width = `${percentage * .1}%`; // x .1 pour convertir les 10emes de s en s
   },
 
-  // afficher le compteur de temps dans l'ui
+  // Afficher le compteur de temps dans l'ui
   displayTimer: () => {
-    memory.timerDisplayElement.textContent = `${Math.floor(memory.currentTime * 0.1)}s`;
+    memory.timerDisplayElement.textContent = `${Math.floor(memory.currentTime * .1)}s`;
   },
 
-  // afficher le message de victoire personnalisé
+  // Afficher le message de victoire personnalisé
   displayVictoryMessage: () => {
+    // Indiquer au joueur victorieux ses statistiques
     memory.victoryMessageElement.textContent = `${memory.currentScore} paires trouvées en ${Math.floor(memory.currentTime * 0.1)} secondes`;
   },
 
-  // afficher le contenu du Hall of Fame avec la data
+  // Afficher le contenu du Hall of Fame avec la data
   displayHallOfFamePlayers: () => {
-    // tri du tableau Hall of Fame par score croissant
+    // Tri du tableau Hall of Fame par score croissant
     memory.hallOfFame.sort((p1, p2) => p1.playerScore - p2.playerScore );
-    
-    // ne garder que les 10 premiers
-
-    // on vide la zone du dom 
+    // Vider la zone du dom 
     memory.HallOfFameListElement.innerHTML = '';
-    // pour chaque joueur de la liste
-    memory.hallOfFame.forEach(player => {
+    // Itérer sur les 9 premiers joueurs de la liste
+    memory.hallOfFame.slice(0,9).forEach((player, index) => {
+      const rank = index + 1; // l'index commence à zéro, on lui ajoute 1
+      const { playerScore, playerName } = player; // astuce d'écriture : déstructurer l'objet
+      // on construit l'élément
       const playerItemElement = document.createElement('li');
       const playerItemContent = `
-          <span class="player-name">${player.playerName}</span>
-          <span class="player-score">${player.playerScore}s</span>
+          <div class="player">
+            <span class="player-rank">${rank}</span>
+            <span class="player-name">${playerName}</span>
+            <span class="player-score">${playerScore}s</span>
+          </div>
       `;
+      // Insèrer le contenu dans l'élément
       playerItemElement.innerHTML = playerItemContent;
+      // Injecter l'élément dans le dom
       memory.HallOfFameListElement.appendChild(playerItemElement);
     });
   },
 
-  // lorsque le joueur soumets son score
+  // Lorsque le joueur soumets son score
   handleSubmitScoreForm: () => {
+    // le formulaire est soumis
     document.querySelector('.player-score-form').addEventListener('submit', (e) => {
+      // Si le jeu n'est pas en state de victoire on bloque
+      if (memory.gameState !== 4) return;
       // Empecher le rechargement de page par défaut
       e.preventDefault();
       // Collecter les infos pour construire l'objet 'player'
       const playerName = memory.sanitizeInput(e.target.playerName.value); // la methode sanitizeInput nettoie les balises problématiques
-      const playerScore = Math.floor(memory.currentTime * 0.1);
+      const playerScore = Math.floor(memory.currentTime * .1);
       // Dans cet objet, clés et valeurs ont le meme nom, on peut réduire le code avec un peu de sucre syntaxique 
       const player = { 
         playerName,
         playerScore
       };
       memory.hallOfFame.push(player);
+      // Rafraichissement de l'affichage
       memory.displayHallOfFamePlayers();
+      // Réinitalisation du jeu
       memory.resetGame();
+      // Retour à l'accueil
       memory.setGameState(1);
     })
   },
 
-  // fermer le panneau game over, retour à l'accueil
+  // Fermer le panneau game over, retour à l'accueil
   handleCloseGameOver: () => {
+    // au clic sur la X de fermeture
     document.querySelector('.game-over .btn').addEventListener('click', () => {
+      // Réinitalisation du jeu
       memory.resetGame();
+      // Retour à l'accueil
       memory.setGameState(1);
     })
   },
 
-  // changer l'état du jeu
+  // Changer l'état du jeu
   setGameState: (state) => {
+    // l'état du jeu permet de limiter les actions possibles et gérer l'affichage
     memory.gameState = state;
     memory.gameElement.dataset.gameState = memory.gameState;
   },
@@ -282,11 +326,11 @@ const memory = {
     }, 100);
   },
 
-  // le jeu est il fini ?
+  // Le jeu est il fini ?
   isGameOver: () => {
     // il existe 2 conditions de fin de jeu
 
-    // VICTOIRE
+    // VICTOIRE 😁
     // si toutes les paires ont été trouvées : score = paires distribuées
     if (memory.currentScore >= memory.numberOfCardPairs ) {
       memory.setGameState(4);
@@ -295,9 +339,9 @@ const memory = {
       memory.areCardsClickable = false;
     }
     
-    // ECHEC
+    // ECHEC 😭
     // si le temps alloué est écoulé : temps actuel >= limite de temps
-    if (memory.currentTime * 0.1 >= memory.timeLimit ) {
+    if (memory.currentTime * .1 >= memory.timeLimit ) {
       memory.setGameState(3);
       memory.isGameActive = false;
       memory.areCardsClickable = false;
@@ -305,10 +349,12 @@ const memory = {
     }
   },
 
+  // Attacher l'évenement Nouvelle partie
   handleNewGame: () => {
     document.querySelector('.new-game-btn').addEventListener('click', () => memory.newGame());
   },
 
+  // Nouvelle partie
   newGame: () => {
     // nouvelle partie, on réinitialise les propriétés
     memory.resetGame();
@@ -320,6 +366,7 @@ const memory = {
     memory.isGameActive = true;
   },
 
+  // Réinitialiser le jeu
   resetGame: () => {
     // réinitilisation des propriétés
     memory.currentPair = [];
@@ -338,9 +385,10 @@ const memory = {
   // ------------
   // utilitaires
   // ------------
-
-  // mélanger un array
+  // Mélanger un array
   shuffleArray: (array) => {
+    // Implémentation de l'algorithme Fisher-Yates
+    // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       const temp = array[i];
@@ -349,8 +397,9 @@ const memory = {
     }
   },
 
-  // nettoyage des saisies
+  // Nettoyage des saisies
   sanitizeInput: (input) => {
+    // on return la chaine débarrassée des tags problématiques '<>' et des espaces de début et fin de chaine
     return input.replace( /(<([^>]+)>)/ig, '').trim();
   },
 
