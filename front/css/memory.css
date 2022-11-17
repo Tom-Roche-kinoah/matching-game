@@ -86,8 +86,8 @@ main {
     font-size: 1em;
     display: flex;
     flex-wrap: wrap; /* on autorise les items flex à revenir à la ligne si nécéssaire */
-    width: calc(var(--card-size) * 9);
-    /* on souhaite 9 items par ligne pour 18 paires, donc on définit la largeur à 9x largeur d'un item */
+    width: calc(var(--card-size) * 7);
+    /* on souhaite 7 items par ligne pour 28 paires, donc on définit la largeur à 7x largeur d'un item */
     justify-content: center;
 }
 
