@@ -54,6 +54,7 @@ Créer les dossiers en suivant l'architecture proposée ici :
 
 📁 matching-game \
 ┗ 📁 server \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┗ 📁 router \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┣ 📁 controllers \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;┗ 📁 dataMappers \
 ┣ 📁 front \
@@ -216,10 +217,9 @@ pour séparer les responsabilités du stockage et de la représentation de la da
 ### La base de données
 
 ### Créer une base de donnée et son utilisateur dédié
-Commençons par nous connecter à notre SGBD Postgres en admin dans un terminal \ 
+Commençons par nous connecter à notre SGBD Postgres en admin dans un terminal
+
 (par ex: `sudo -i -u postgres` sous linux)
-
-
 
 Créer un user : `CREATE ROLE memory WITH LOGIN PASSWORD 'memory';`
 
@@ -230,7 +230,7 @@ Créer la base et y attacher l'user : `CREATE DATABASE memory OWNER memory;`
 Il nous faut ensuite créer une table 'score' qui va respecter ce MLD :
 - ***Score**(codeScore, playerName, playerScore, createdAt, updatedAt)*
 
-Ce qui donne en SQL :
+Ce qui donne en SQL pour Postgres :
 
 ```SQL
 CREATE TABLE IF NOT EXISTS "score"(
@@ -254,7 +254,7 @@ INSERT INTO "score" ("player_name", "player_score") VALUES
   ('Maéva', '76');
 ```
 Effectuons une requete de test toujours avec le CLI :\
-*Je veux récuperer les 3 meilleurs scores, je trie donc par score décroissant, et je limite au 3 premiers résultats.*
+*Je veux récuperer les 3 meilleurs scores, je trie donc par score décroissant, et je limite aux 3 premiers résultats.*
 ```SQL
 SELECT * FROM score ORDER BY player_score ASC LIMIT 3;
 ```
