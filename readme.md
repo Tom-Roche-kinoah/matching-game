@@ -12,6 +12,7 @@ Idéal pour travailler sa mémoire et sa concentration.
 2. [Conception statique de l'affichage : html et css](#2---conception-statique-de-laffichage--html-et-css)
 3. [dynamisation de l'affichage : js en front](#3---dynamisation-de-laffichage--js-en-front)
 4. [persistance des données : js en back, postgresql](#4---persistance-des-données--js-en-back-postgresql)
+5. [Connecter l'app et le serveur](#5---connecter-lapp-et-le-serveur)
 
 ## Rappel des spécifications (les fonctionnalités souhaitées)
 
@@ -216,7 +217,7 @@ pour séparer les responsabilités du stockage et de la représentation de la da
 
 ### La base de données
 
-### Créer une base de donnée et son utilisateur dédié
+#### Créer une base de donnée et son utilisateur dédié
 Commençons par nous connecter à notre SGBD Postgres en admin dans un terminal
 
 (par ex: `sudo -i -u postgres` sous linux)
@@ -244,7 +245,7 @@ CREATE TABLE IF NOT EXISTS "score"(
 
 :warning: : Ne pas oublier de se positionner sur la bonne base de données avant de créer la table !
 
-Créer un peu de data de test :
+#### Créer un peu de data de test
 ```SQL
 INSERT INTO "score" ("player_name", "player_score") VALUES
   ('Louise', '34'),
@@ -262,5 +263,65 @@ SELECT * FROM score ORDER BY player_score ASC LIMIT 3;
 ### Le serveur
 Le rôle de notre serveur se limitera à jouer les intérmédiaires entre notre app et le sgbd.
 
-La première pierre de l'édifice est l'index du serveur, qui instancie express et permet d'echanger en http avec le client (l'app)
+La première pierre de l'édifice est l'index du serveur, qui instancie express et permet d'échanger en http avec le client (l'app)
 
+Une fois le serveur opérationnel, on lui demande de servir notre dossier public : 
+```JS
+app.use(express.static('front'));
+```
+
+Ainsi, l'url de base de notre serveur nous affichera notre jeu.
+
+#### L'Api
+
+On commence par préciser, toujours sur le serveur, que les échanges seront parsés en Json : 
+```JS
+app.use(express.json());
+```
+
+La suite en 3 étapes :
+- routeur
+- controller
+- data mapper
+
+Le routeur intercepte les requetes client et, en fonction de l'url et du verbe http utilisé, appelle le controleur associé : 
+```JS
+router.get('/score', scoreController.allScores);
+```
+
+Le controller injecte la logique dans le traitement de la donnée en entrée/sortie, et appelle la bonne fonction du data mapper : 
+*par ex. ici la forme que l'on donne à la data (json) qui va repartir au client* : 
+```JS
+exports.allScores = async (req, res) => {
+    try {
+        const scores = await dataMapper.fetchAllScores();
+        res.json(scores);
+    } catch (error) {
+        res.json(error);
+    }
+};
+```
+
+Le datamapper requete le sgbd et retourne son resultat :
+```JS
+exports.fetchAllScores = async () => {
+    const scores = await db.query(`
+        SELECT *
+        FROM "score"
+        ORDER BY "player_score" ASC
+    `);
+    return scores.rows;
+};
+```
+
+*Note : Les fonctions du controller et du datamapper sont asynchrones, car le serveur de bdd peut prendre un certain laps de temps avant de répondre.*
+
+A ce stade, avec le serveur démarré, en appelant dans notre navigateur : http://localhost:5001/score/ on devrait etre en mesure de récuperer la liste d'objets 'scores' en json.
+
+
+
+## 5 - Connecter l'app et le serveur
+
+Pour terminer, il faut retourner dans le code du jeu, pour implémenter les requetes à l'api.
+
+### Fetch mon ami !
