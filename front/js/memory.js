@@ -17,7 +17,7 @@ const memory = {
   // Parametres de jeu
   timeLimit: 300, // temps alloué pour ue partie, en secondes
   cardDisplayTime: 1, // temps d'affichage d'une paire de cartes retournée, en secondes
-  numberOfCardPairs: 4, // nombre de paires de cartes (max 18 en l'état)
+  numberOfCardPairs: 14, // nombre de paires de cartes (max 18 en l'état)
 
   // Elements du dom (les éléments auquels on a besoin d'acceder régulièrement)
   gameElement: document.querySelector('.game'), // la zone globale, qui change de state
@@ -29,8 +29,7 @@ const memory = {
   HallOfFameListElement: document.querySelector('.player-list'), // le Hall of Fame
 
   // Méthode d'initialisation de l'app
-  init: async () => {
-    await memory.fetchAllScore();
+  init: () => {
     memory.displayHallOfFamePlayers();
     memory.gameTimeEngine();
     memory.handleNewGame();
@@ -229,9 +228,11 @@ const memory = {
   },
 
   // Afficher le contenu du Hall of Fame avec la data
-  displayHallOfFamePlayers: () => {
+  displayHallOfFamePlayers: async () => {
+    await memory.fetchAllScore();
     // Tri du tableau Hall of Fame par score croissant
-    memory.hallOfFame.sort((p1, p2) => p1.playerScore - p2.playerScore );
+    // (temporaire, au final le sgbd se chargera de trier)
+    // memory.hallOfFame.sort((p1, p2) => p1.playerScore - p2.playerScore );
     // Vider la zone du dom 
     memory.HallOfFameListElement.innerHTML = '';
     // Itérer sur les 9 premiers joueurs de la liste
@@ -255,22 +256,23 @@ const memory = {
   },
 
   // Lorsque le joueur soumets son score
-  handleSubmitScoreForm: () => {
+  handleSubmitScoreForm: async () => {
     // le formulaire est soumis
     document.querySelector('.player-score-form').addEventListener('submit', (e) => {
       // Si le jeu n'est pas en state de victoire on bloque
       if (memory.gameState !== 4) return;
       // Empecher le rechargement de page par défaut
       e.preventDefault();
-      // Collecter les infos pour construire l'objet 'player'
-      const playerName = memory.sanitizeInput(e.target.playerName.value); // la methode sanitizeInput nettoie les balises problématiques
-      const playerScore = Math.floor(memory.currentTime * .1);
+      // Collecter les infos pour construire l'objet 'score'
+      const player_name = memory.sanitizeInput(e.target.player_name.value); // la methode sanitizeInput nettoie les balises problématiques
+      const player_score = Math.floor(memory.currentTime * .1);
       // Dans cet objet, clés et valeurs ont le meme nom, on peut réduire le code avec un peu de sucre syntaxique 
-      const player = { 
-        playerName,
-        playerScore
+      const score = { 
+        player_name,
+        player_score
       };
-      memory.hallOfFame.push(player);
+      memory.fetchAddScore(score);
+      // memory.hallOfFame.push(player);
       // Rafraichissement de l'affichage
       memory.displayHallOfFamePlayers();
       // Réinitalisation du jeu
@@ -373,16 +375,34 @@ const memory = {
   // ------------
   // méthodes API
   // ------------
+
+  // récupérer les scores depuis la bdd
   fetchAllScore: async () => {
     try {
       const response = await fetch(`${memory.apiBaseUrl}/score`);
       const scores = await response.json();
-      console.log(scores);
       memory.hallOfFame = scores;    
-      memory.displayHallOfFamePlayers();
-  } catch (error) {
-      console.error(error);
-  }
+    } catch (error) {
+        console.error(error);
+    }
+  },
+
+  // ajouter un score en bdd
+  fetchAddScore: async (score) => {
+    try {
+        const response = await fetch(`${memory.apiBaseUrl}/score`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(score),
+          }
+        )
+        const insertedScore = await response.json();
+        console.log(insertedScore);  
+    } catch (error) {
+        console.error(error);
+    }
   },
 
   // ------------
