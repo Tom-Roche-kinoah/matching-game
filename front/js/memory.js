@@ -11,21 +11,8 @@ const memory = {
   isGameActive: false, // le jeu est il en cours
   currentScore: 0, // nombre de paires découvertes
   currentTime: 0, // chrono en cours en 10e de secondes
-  hallOfFame: [
-    {playerName: 'Camille', playerScore: 12},
-    {playerName: 'Cécile', playerScore: 13},
-    {playerName: 'Claudia', playerScore: 5},
-    {playerName: 'Léa', playerScore: 8},
-    {playerName: 'Justine', playerScore: 16},
-    {playerName: 'Albert', playerScore: 25},
-    {playerName: 'Julien', playerScore: 36},
-    {playerName: 'Maéva', playerScore: 10},
-    {playerName: 'Louis', playerScore: 10},
-    {playerName: 'Rémi', playerScore: 10},
-    {playerName: 'Tom', playerScore: 10},
-    {playerName: 'Charly', playerScore: 15}
-  ], // le tableau des meilleurs scores
-  apiBaseUrl: "xxx", // url à requeter pour la gestion des scores
+  hallOfFame: [], // le tableau des meilleurs scores
+  apiBaseUrl: "http://localhost:5001", // url à requeter pour la gestion des scores
 
   // Parametres de jeu
   timeLimit: 300, // temps alloué pour ue partie, en secondes
@@ -42,7 +29,8 @@ const memory = {
   HallOfFameListElement: document.querySelector('.player-list'), // le Hall of Fame
 
   // Méthode d'initialisation de l'app
-  init: () => {
+  init: async () => {
+    await memory.fetchAllScore();
     memory.displayHallOfFamePlayers();
     memory.gameTimeEngine();
     memory.handleNewGame();
@@ -249,14 +237,14 @@ const memory = {
     // Itérer sur les 9 premiers joueurs de la liste
     memory.hallOfFame.slice(0,9).forEach((player, index) => {
       const rank = index + 1; // l'index commence à zéro, on lui ajoute 1
-      const { playerScore, playerName } = player; // astuce d'écriture : déstructurer l'objet
+      const { player_score, player_name } = player; // astuce d'écriture : déstructurer l'objet
       // on construit l'élément
       const playerItemElement = document.createElement('li');
       const playerItemContent = `
           <div class="player">
             <span class="player-rank">${rank}</span>
-            <span class="player-name">${playerName}</span>
-            <span class="player-score">${playerScore}s</span>
+            <span class="player-name">${player_name}</span>
+            <span class="player-score">${player_score}s</span>
           </div>
       `;
       // Insèrer le contenu dans l'élément
@@ -380,6 +368,21 @@ const memory = {
     memory.displayScore();
     memory.displayTimer();
     memory.displayTimeBarProgress();
+  },
+
+  // ------------
+  // méthodes API
+  // ------------
+  fetchAllScore: async () => {
+    try {
+      const response = await fetch(`${memory.apiBaseUrl}/score`);
+      const scores = await response.json();
+      console.log(scores);
+      memory.hallOfFame = scores;    
+      memory.displayHallOfFamePlayers();
+  } catch (error) {
+      console.error(error);
+  }
   },
 
   // ------------
