@@ -12,7 +12,7 @@ const memory = {
   currentScore: 0, // nombre de paires découvertes
   currentTime: 0, // chrono en cours en 10e de secondes
   hallOfFame: [], // le tableau des meilleurs scores
-  apiBaseUrl: "http://localhost:5001", // url à requeter pour la gestion des scores
+  apiBaseUrl: "https://memory.osc-fr1.scalingo.io", // url à requeter pour la gestion des scores
 
   // Parametres de jeu
   timeLimit: 300, // temps alloué pour ue partie, en secondes
