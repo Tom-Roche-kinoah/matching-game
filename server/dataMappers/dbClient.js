@@ -2,12 +2,13 @@
 const { Client } = require('pg');
 
 // Configuration d'une connexion
-const client = new Client({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD
-});
+// const client = new Client({
+//     host: process.env.PG_HOST,
+//     user: process.env.PG_USER,
+//     database: process.env.PG_DATABASE,
+//     password: process.env.PG_PASSWORD
+// });
+const client = new Client(process.env.PG_URL);
 
 // Connexion
 client.connect(err => {
