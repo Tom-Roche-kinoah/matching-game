@@ -32,7 +32,7 @@ const deployDb = async () => {
       "updated_at" TIMESTAMPTZ
     );
 
-    DELETE FROM "score",
+    DELETE FROM "score";
 
     INSERT INTO "score" ("player_name", "player_score") VALUES
       ('Louise', 169),
